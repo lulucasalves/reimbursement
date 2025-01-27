@@ -3,19 +3,22 @@
 @tailwind utilities;
 
 :root {
+  --mobileSize: 800px;
   --background: #ffffff;
   --foreground: #171717;
+  --gray1: rgba(0, 0, 0, 0.8);
+  --gray2: rgba(0, 0, 0, 0.2);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --gray1: rgba(255, 255, 255, 0.8);
+  --gray2: rgba(255, 255, 255, 0.2);
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: roboto, sans-serif;
 }

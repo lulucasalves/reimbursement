@@ -1,0 +1,21 @@
+{
+    "site_name": "My Finance",
+    "head_title_auth": "Authentication",
+    "head_description_auth": "Authentication Session",
+    "head_content_auth": "Authentication Session",
+    "language": "Language",
+    "auth_title": "Log in or Sign up",
+    "auth_description": "Choose one of the options",
+    "auth_email": "Email Login",
+    "auth_google": "Google Login",
+    "auth_outlook": "Outlook Login",
+    "auth_linkedin": "Linkedin Login",
+    "auth_email_description": "Insert your email",
+    "return": "Return",
+    "next": "Next",
+    "auth_confirm_email": "Confirm your email",
+    "auth_code_description": "Insert code with 6 digits that was been sent to",
+    "received_code": "Insert received code",
+    "resend_code": "Resend code",
+    "projects": "Projects"
+}

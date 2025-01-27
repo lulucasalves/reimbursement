@@ -1,0 +1,20 @@
+{
+    "site_name": "Minhas Finanças",
+    "head_title_auth": "Autenticação",
+    "head_description_auth": "Sessão de Autenticação",
+    "head_content_auth": "Sessão de Autenticação",
+    "language": "Idioma",
+    "auth_title": "Entrar ou Cadastrar-se",
+    "auth_description": "Escolha uma das opções",
+    "auth_email": "Entrar com Email",
+    "auth_google": "Entrar com Google",
+    "auth_outlook": "Entrar com Outlook",
+    "auth_linkedin": "Entrar com Linkedin",
+    "auth_email_description": "Insira seu email",
+    "return": "Voltar",
+    "next": "Próximo",
+    "auth_confirm_email": "Confirme seu email",
+    "auth_code_description": "Insira o código de 6 digitos enviados para",
+    "received_code": "Insira o código recebido",
+    "resend_code": "Reenviar código"
+}
