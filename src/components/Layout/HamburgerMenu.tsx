@@ -1,10 +1,11 @@
 import { useStatus } from "~/src/contexts/state";
 import { HamburgerMenu } from "./styles";
+import { MouseEvent } from "react";
 
 export function ComponentHamburgerMenu() {
   const { setMenuMobile, menuMobile } = useStatus();
 
-  const handleClick = (e: any) => {
+  const handleClick = (e: MouseEvent<HTMLLabelElement>) => {
     e.preventDefault();
     setMenuMobile(!menuMobile);
   };
