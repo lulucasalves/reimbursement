@@ -4,7 +4,9 @@ export interface StatusContextType {
   t: (value: string) => string;
   currentLanguage: string;
   changeLanguage: (language: string) => void;
-  languageOptions: string[]
+  languageOptions: string[],
+  menuMobile: boolean,
+  setMenuMobile: (value: boolean) => void
 }
 
 export interface InterfaceMessageTranslation {

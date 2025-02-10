@@ -4,3 +4,9 @@ export * from "./Outlook";
 export * from "./Linkedin";
 export * from "./Notification";
 export * from "./Settings";
+export * from "./Logout";
+export * from "./Backard";
+export * from "./Forward";
+export * from "./Home";
+export * from "./Dashboard";
+export * from './Employees'

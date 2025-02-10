@@ -1,4 +1,4 @@
-import { ComponentHead, ComponentLayoutMenu } from "~/src/components";
+import { ComponentLayoutContainer, ComponentHead } from "~/src/components";
 
 export function ViewDashboard() {
   return (
@@ -8,7 +8,9 @@ export function ViewDashboard() {
         description="head_description_dashboard"
         content="head_content_dashboard"
       />
-      <ComponentLayoutMenu />
+      <ComponentLayoutContainer>
+        <h1>Hi</h1>
+      </ComponentLayoutContainer>
     </>
   );
 }

@@ -7,7 +7,6 @@ import { useStatus } from "~/src/contexts/state";
 
 export default function ComponentLanguageToggle() {
   const { currentLanguage, changeLanguage, languageOptions, t } = useStatus();
-  console.log(currentLanguage);
 
   const itemTranslate = {
     pt: "Português",

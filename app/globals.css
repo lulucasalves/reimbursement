@@ -8,6 +8,7 @@
   --foreground: #171717;
   --gray1: rgba(0, 0, 0, 0.8);
   --gray2: rgba(0, 0, 0, 0.2);
+  --error: #ff3333;
 }
 
 .dark {

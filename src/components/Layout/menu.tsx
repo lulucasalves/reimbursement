@@ -1,5 +1,6 @@
-import { Container, ContainerImage } from "./styles";
-import { ComponentLogo } from "./logo";
+import { useState, MouseEvent } from "react";
+import { ContainerMenu, ContainerImage } from "./styles";
+import { ComponentLogo } from "./Logo";
 import { useAuth } from "~/src/contexts/auth";
 import {
   FormControl,
@@ -7,20 +8,50 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Menu,
+  Divider,
 } from "@mui/material";
-import { IconNotification, IconSettings } from "../Icon";
+import { IconLogout, IconNotification, IconSettings } from "../Icon";
 import Image from "next/image";
+import { useStatus } from "~/src/contexts/state";
+import { useRouter } from "next/navigation";
+import { ComponentHamburgerMenu } from "./HamburgerMenu";
 
 export function ComponentLayoutMenu() {
   const { company, companies, changeCompany } = useAuth();
+  const { t } = useStatus();
+  const router = useRouter();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   function changeCompanyToggle(e: SelectChangeEvent) {
     changeCompany(parseInt(e.target.value));
   }
 
+  function handleOpenMenu(event: MouseEvent<HTMLElement>) {
+    setAnchorEl(event.currentTarget);
+  }
+
+  function handleCloseMenu() {
+    setAnchorEl(null);
+  }
+
+  function goToConfigPage() {
+    router.push("configurations");
+  }
+
+  function logout() {
+    localStorage.removeItem("token");
+    router.push("auth");
+  }
+
   return (
-    <Container>
+    <ContainerMenu>
       <div className="group-items">
+        <div className="item4">
+          <ComponentHamburgerMenu />
+        </div>
         <div className="item1">
           <ComponentLogo />
         </div>
@@ -49,13 +80,8 @@ export function ComponentLayoutMenu() {
               <IconNotification height={22} />
             </IconButton>
           </div>
-          <div className="item4">
-            <IconButton size="large">
-              <IconSettings height={22} />
-            </IconButton>
-          </div>
         </div>
-        <IconButton>
+        <IconButton onClick={handleOpenMenu}>
           <ContainerImage>
             <Image
               alt="user"
@@ -66,7 +92,19 @@ export function ComponentLayoutMenu() {
             />
           </ContainerImage>
         </IconButton>
+
+        <Menu anchorEl={anchorEl} open={open} onClose={handleCloseMenu}>
+          <MenuItem onClick={goToConfigPage} sx={{ gap: "8px" }}>
+            <IconSettings height={20} />
+            {t("settings")}
+          </MenuItem>
+          <Divider />
+          <MenuItem onClick={logout} sx={{ gap: "8px", color: "var(--error)" }}>
+            <IconLogout height={20} color="var(--error)" />
+            {t("logout")}
+          </MenuItem>
+        </Menu>
       </div>
-    </Container>
+    </ContainerMenu>
   );
 }

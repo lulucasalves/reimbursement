@@ -14,6 +14,7 @@ const StatusContext = createContext<StatusContextType | undefined>(undefined);
 
 export const StatusProvider = ({ children }: InterfaceProvider) => {
   const [darkMode, setDarkMode] = useState<boolean>(true);
+  const [menuMobile, setMenuMobile] = useState<boolean>(false);
   const [currentLanguage, setCurrentLanguage] = useState<string>("en");
   const languageOptions = ["en", "pt"];
 
@@ -87,6 +88,8 @@ export const StatusProvider = ({ children }: InterfaceProvider) => {
         currentLanguage,
         changeLanguage,
         languageOptions,
+        setMenuMobile,
+        menuMobile
       }}
     >
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
