@@ -9,6 +9,8 @@ export const ContainerMenu = styled.div`
   background-color: var(--background);
   border-bottom: 1px solid var(--gray2);
   z-index: 100;
+  position: relative;
+  margin-bottom: -73px;
 
   .group-items {
     gap: 2rem;
@@ -65,7 +67,7 @@ export const ContainerSideMenu = styled.div<InterfaceContainerSideMenu>`
     if (type === "hide") {
       return "0";
     } else if (type === "expanded") {
-      return "200px";
+      return "250px";
     } else {
       return "60px";
     }
@@ -73,12 +75,14 @@ export const ContainerSideMenu = styled.div<InterfaceContainerSideMenu>`
   border-right: 1px solid var(--gray2);
   height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
   transition: width 0.3s ease-in-out;
   z-index: 99;
   background: var(--background);
 
   @media (max-width: 800px) {
     position: absolute;
+    top: 73px;
 
     .iconExpanded {
       display: none;
@@ -144,6 +148,7 @@ export const Container = styled.div`
     .content {
       width: 100%;
       margin: 20px;
+      margin-top: 87px;
     }
   }
 `;

@@ -1,6 +1,7 @@
 {
   "site_name": "My Finance",
   "head_title_auth": "Authentication",
+  "head_title_dashboard": "Dashboard",
   "head_description_auth": "Authentication Session",
   "head_content_auth": "Authentication Session",
   "language": "Language",
@@ -21,5 +22,13 @@
   "settings": "Settings",
   "logout": "Logout",
   "dashboard": "Dashboard",
-  "employees": "Employees"
+  "employees": "Employees",
+  "events": "Events",
+  "reimbursements": "Reimbursements",
+  "preferences": "Preferences",
+  "theme": "Theme",
+  "profile": "Profile",
+  "name": "Name",
+  "createdAt": "Created at",
+  "status": "Status"
 }

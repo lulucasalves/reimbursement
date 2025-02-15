@@ -15,6 +15,7 @@ const StatusContext = createContext<StatusContextType | undefined>(undefined);
 export const StatusProvider = ({ children }: InterfaceProvider) => {
   const [darkMode, setDarkMode] = useState<boolean>(true);
   const [menuMobile, setMenuMobile] = useState<boolean>(false);
+  const [modal, setModal] = useState<string>("");
   const [currentLanguage, setCurrentLanguage] = useState<string>("en");
   const languageOptions = ["en", "pt"];
 
@@ -68,6 +69,45 @@ export const StatusProvider = ({ children }: InterfaceProvider) => {
     window.location.pathname = path.join("/");
   }
 
+  function formatDate(dateString: string) {
+    const [datePart, timePart] = dateString.split(" - ");
+    const [year, month, day] = datePart.split("-");
+    const [hour = "00", minute = "00", second = "00"] = (
+      timePart || "00:00:00"
+    ).split(":");
+
+    const date = new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      Number(hour),
+      Number(minute),
+      Number(second)
+    );
+
+    let formattedDate;
+    if (currentLanguage === "pt") {
+      formattedDate = `${String(day).padStart(2, "0")}/${String(month).padStart(
+        2,
+        "0"
+      )}/${year} - ${String(hour).padStart(2, "0")}:${String(minute).padStart(
+        2,
+        "0"
+      )}:${String(second).padStart(2, "0")}`;
+    } else {
+      const hour12 = Number(hour);
+      formattedDate = `${String(month).padStart(2, "0")}/${String(day).padStart(
+        2,
+        "0"
+      )}/${year} - ${String(hour12).padStart(2, "0")}:${String(minute).padStart(
+        2,
+        "0"
+      )}:${String(second).padStart(2, "0")}`;
+    }
+
+    return formattedDate;
+  }
+
   const theme = createTheme({
     colorSchemes: {
       dark: darkMode,
@@ -89,7 +129,10 @@ export const StatusProvider = ({ children }: InterfaceProvider) => {
         changeLanguage,
         languageOptions,
         setMenuMobile,
-        menuMobile
+        menuMobile,
+        modal,
+        setModal,
+        formatDate,
       }}
     >
       <ThemeProvider theme={theme}>{children}</ThemeProvider>

@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, Suspense } from "react";
 import { ContainerMenu, ContainerImage } from "./styles";
 import { ComponentLogo } from "./Logo";
 import { useAuth } from "~/src/contexts/auth";
@@ -16,14 +16,25 @@ import Image from "next/image";
 import { useStatus } from "~/src/contexts/state";
 import { useRouter } from "next/navigation";
 import { ComponentHamburgerMenu } from "./HamburgerMenu";
+import dynamic from "next/dynamic";
+import { MdNotifications, MdNotificationsNone } from "react-icons/md";
+import { AiOutlineSetting } from "react-icons/ai";
+import { TbDoorEnter } from "react-icons/tb";
+
+const SettingsModal = dynamic(() => import("../Settings"), {
+  loading: () => null,
+  ssr: false,
+});
 
 export function ComponentLayoutMenu() {
   const { company, companies, changeCompany } = useAuth();
   const { t } = useStatus();
   const router = useRouter();
+  const notificationsNum = 0;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [openSettings, setOpenSettings] = useState(true);
 
   function changeCompanyToggle(e: SelectChangeEvent) {
     changeCompany(parseInt(e.target.value));
@@ -38,7 +49,11 @@ export function ComponentLayoutMenu() {
   }
 
   function goToConfigPage() {
-    router.push("configurations");
+    setOpenSettings(true);
+  }
+
+  function handleCloseSettings() {
+    setOpenSettings(false);
   }
 
   function logout() {
@@ -77,7 +92,11 @@ export function ComponentLayoutMenu() {
         <div className="group-icons">
           <div className="item3">
             <IconButton size="large">
-              <IconNotification height={22} />
+              {!notificationsNum ? (
+                <MdNotificationsNone fontSize={24} />
+              ) : (
+                <MdNotifications fontSize={24} />
+              )}
             </IconButton>
           </div>
         </div>
@@ -95,16 +114,22 @@ export function ComponentLayoutMenu() {
 
         <Menu anchorEl={anchorEl} open={open} onClose={handleCloseMenu}>
           <MenuItem onClick={goToConfigPage} sx={{ gap: "8px" }}>
-            <IconSettings height={20} />
+            <AiOutlineSetting fontSize={20} />
             {t("settings")}
           </MenuItem>
           <Divider />
           <MenuItem onClick={logout} sx={{ gap: "8px", color: "var(--error)" }}>
-            <IconLogout height={20} color="var(--error)" />
+            <TbDoorEnter fontSize={20} color="var(--error)" />
             {t("logout")}
           </MenuItem>
         </Menu>
       </div>
+
+      <Suspense fallback={null}>
+        {openSettings && (
+          <SettingsModal isOpen={openSettings} onClose={handleCloseSettings} />
+        )}
+      </Suspense>
     </ContainerMenu>
   );
 }

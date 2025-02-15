@@ -4,8 +4,11 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useStatus } from "~/src/contexts/state";
+import { InterfaceLanguageToggle } from "./interfaces";
 
-export default function ComponentLanguageToggle() {
+export default function ComponentLanguageToggle({
+  hasLabel = true,
+}: InterfaceLanguageToggle) {
   const { currentLanguage, changeLanguage, languageOptions, t } = useStatus();
 
   const itemTranslate = {
@@ -19,14 +22,16 @@ export default function ComponentLanguageToggle() {
 
   return (
     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <InputLabel id="demo-simple-select-helper-label">
-        {t("language")}
-      </InputLabel>
+      {hasLabel && (
+        <InputLabel id="demo-simple-select-helper-label">
+          {t("language")}
+        </InputLabel>
+      )}
       <Select
         labelId="demo-simple-select-helper-label"
         id="demo-simple-select-helper"
         value={currentLanguage}
-        label={t("language")}
+        label={hasLabel ? t("language") : ""}
         onChange={handleChange}
         sx={{ fontSize: "1rem" }}
       >

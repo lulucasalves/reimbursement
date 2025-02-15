@@ -11,14 +11,23 @@ import {
   IconButton,
 } from "@mui/material";
 import { ContainerSideMenu } from "./styles";
-import {
-  IconBackard,
-  IconForward,
-  IconDashboard,
-  IconEmployees,
-} from "../Icon";
+import { IconDashboard, IconEmployees } from "../Icon";
 import { useStatus } from "~/src/contexts/state";
 import { InterfaceSideMenu } from "./interfaces";
+import {
+  FaAnglesLeft,
+  FaAnglesRight,
+  FaCalendar,
+  FaRegCalendar,
+} from "react-icons/fa6";
+import {
+  BsBarChartLine,
+  BsBarChartLineFill,
+  BsCalendar2Event,
+  BsCalendar2EventFill,
+} from "react-icons/bs";
+import { MdOutlinePeopleOutline, MdPeople } from "react-icons/md";
+import { PiMoneyWavyBold, PiMoneyWavyFill } from "react-icons/pi";
 
 export function ComponentLayoutSideMenu({ menuMobile }: InterfaceSideMenu) {
   const [expanded, setExpanded] = useState(true);
@@ -29,14 +38,26 @@ export function ComponentLayoutSideMenu({ menuMobile }: InterfaceSideMenu) {
   const menuItems = [
     {
       text: t("dashboard"),
-      icon: <IconDashboard height={22} />,
-      iconFill: <IconDashboard height={22} fill />,
+      icon: <BsBarChartLine fontSize={22} />,
+      iconFill: <BsBarChartLineFill fontSize={22} />,
       path: "dashboard",
     },
     {
+      text: t("events"),
+      icon: <FaRegCalendar fontSize={21} />,
+      iconFill: <FaCalendar fontSize={21} />,
+      path: "events",
+    },
+    {
+      text: t("reimbursements"),
+      icon: <PiMoneyWavyBold fontSize={23} />,
+      iconFill: <PiMoneyWavyFill fontSize={23} />,
+      path: "reimbursements",
+    },
+    {
       text: t("employees"),
-      icon: <IconEmployees height={22} />,
-      iconFill: <IconEmployees height={22} fill />,
+      icon: <MdOutlinePeopleOutline fontSize={23} />,
+      iconFill: <MdPeople fontSize={23} />,
       path: "employees",
     },
   ];
@@ -54,9 +75,13 @@ export function ComponentLayoutSideMenu({ menuMobile }: InterfaceSideMenu) {
       <IconButton
         className="iconExpanded"
         onClick={() => setExpanded(!expanded)}
-        sx={{ margin: "8px" }}
+        sx={{ margin: "8px", marginTop: "80px" }}
       >
-        {expanded ? <IconBackard height={18} /> : <IconForward height={18} />}
+        {expanded ? (
+          <FaAnglesLeft fontSize={18} />
+        ) : (
+          <FaAnglesRight fontSize={18} />
+        )}
       </IconButton>
 
       <List>

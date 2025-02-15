@@ -1,7 +1,8 @@
 import styled from "styled-components";
+import { InterfaceToggle } from "./interfaces";
 
-export const Toggle = styled.input`
-  --size: 1.6rem;
+export const Toggle = styled.input<InterfaceToggle>`
+  --size: ${({ size }) => size || "1.6rem"};
 
   appearance: none;
   outline: none;

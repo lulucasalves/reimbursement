@@ -6,3 +6,4 @@ export * from "./Layout/Menu";
 export * from "./Layout/SideMenu";
 export * from "./Layout/HamburgerMenu";
 export * from "./Layout/Container";
+export * from "./Dashboard";

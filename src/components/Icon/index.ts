@@ -10,3 +10,4 @@ export * from "./Forward";
 export * from "./Home";
 export * from "./Dashboard";
 export * from './Employees'
+export * from './Close'
