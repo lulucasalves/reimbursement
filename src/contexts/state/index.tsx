@@ -76,15 +76,6 @@ export const StatusProvider = ({ children }: InterfaceProvider) => {
       timePart || "00:00:00"
     ).split(":");
 
-    const date = new Date(
-      Number(year),
-      Number(month) - 1,
-      Number(day),
-      Number(hour),
-      Number(minute),
-      Number(second)
-    );
-
     let formattedDate;
     if (currentLanguage === "pt") {
       formattedDate = `${String(day).padStart(2, "0")}/${String(month).padStart(

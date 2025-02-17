@@ -15,7 +15,7 @@ export const ContentOptions = styled.div`
   width: 55%;
   padding: 1rem 2rem;
 
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     width: 100%;
   }
 `;
@@ -52,7 +52,7 @@ export const ContentSide = styled.div`
     }
   }
 
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     width: 100%;
   }
 `;
@@ -71,7 +71,7 @@ export const ImageSide = styled.div`
   background-size: cover;
   background-position: center;
 
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     display: none;
   }
 `;

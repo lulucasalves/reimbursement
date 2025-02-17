@@ -11,7 +11,6 @@ import {
   IconButton,
 } from "@mui/material";
 import { ContainerSideMenu } from "./styles";
-import { IconDashboard, IconEmployees } from "../Icon";
 import { useStatus } from "~/src/contexts/state";
 import { InterfaceSideMenu } from "./interfaces";
 import {
@@ -20,12 +19,7 @@ import {
   FaCalendar,
   FaRegCalendar,
 } from "react-icons/fa6";
-import {
-  BsBarChartLine,
-  BsBarChartLineFill,
-  BsCalendar2Event,
-  BsCalendar2EventFill,
-} from "react-icons/bs";
+import { BsBarChartLine, BsBarChartLineFill } from "react-icons/bs";
 import { MdOutlinePeopleOutline, MdPeople } from "react-icons/md";
 import { PiMoneyWavyBold, PiMoneyWavyFill } from "react-icons/pi";
 
@@ -65,7 +59,7 @@ export function ComponentLayoutSideMenu({ menuMobile }: InterfaceSideMenu) {
   return (
     <ContainerSideMenu
       type={
-        !menuMobile && window.innerWidth < 800
+        !menuMobile && window.innerWidth < 768
           ? "hide"
           : expanded
           ? "expanded"

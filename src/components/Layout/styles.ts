@@ -28,7 +28,7 @@ export const ContainerMenu = styled.div`
     display: none;
   }
 
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     .item4 {
       display: block;
     }
@@ -80,7 +80,7 @@ export const ContainerSideMenu = styled.div<InterfaceContainerSideMenu>`
   z-index: 99;
   background: var(--background);
 
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     position: absolute;
     top: 73px;
 

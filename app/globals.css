@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --mobileSize: 800px;
+  --mobileSize: 768px;
   --background: #ffffff;
   --background-light: #f5f5f5;
   --foreground: #171717;

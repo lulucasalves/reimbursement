@@ -29,5 +29,6 @@
   "profile": "Perfil",
   "name": "Nome",
   "createdAt": "Criado em",
-  "status": "Status"
+  "status": "Status",
+  "monthYear": "Mês / Ano"
 }

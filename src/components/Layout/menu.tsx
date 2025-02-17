@@ -11,13 +11,11 @@ import {
   Menu,
   Divider,
 } from "@mui/material";
-import { IconLogout, IconNotification, IconSettings } from "../Icon";
 import Image from "next/image";
 import { useStatus } from "~/src/contexts/state";
 import { useRouter } from "next/navigation";
 import { ComponentHamburgerMenu } from "./HamburgerMenu";
 import dynamic from "next/dynamic";
-import { MdNotifications, MdNotificationsNone } from "react-icons/md";
 import { AiOutlineSetting } from "react-icons/ai";
 import { TbDoorEnter } from "react-icons/tb";
 
@@ -30,11 +28,10 @@ export function ComponentLayoutMenu() {
   const { company, companies, changeCompany } = useAuth();
   const { t } = useStatus();
   const router = useRouter();
-  const notificationsNum = 0;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [openSettings, setOpenSettings] = useState(true);
+  const [openSettings, setOpenSettings] = useState(false);
 
   function changeCompanyToggle(e: SelectChangeEvent) {
     changeCompany(parseInt(e.target.value));
@@ -89,7 +86,7 @@ export function ComponentLayoutMenu() {
         </div>
       </div>
       <div className="group-items">
-        <div className="group-icons">
+        {/* <div className="group-icons">
           <div className="item3">
             <IconButton size="large">
               {!notificationsNum ? (
@@ -99,7 +96,7 @@ export function ComponentLayoutMenu() {
               )}
             </IconButton>
           </div>
-        </div>
+        </div> */}
         <IconButton onClick={handleOpenMenu}>
           <ContainerImage>
             <Image

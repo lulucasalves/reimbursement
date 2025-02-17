@@ -14,17 +14,11 @@ import { Content, ContentContainer, TitleClose } from "./styles";
 import { useState } from "react";
 import { RiCloseLine, RiUserSettingsFill } from "react-icons/ri";
 import { RiUserSettingsLine } from "react-icons/ri";
-import {
-  MdBorderColor,
-  MdOutlineBorderColor,
-  MdOutlinePerson,
-  MdPerson,
-} from "react-icons/md";
+import { MdOutlinePerson, MdPerson } from "react-icons/md";
 import { IoDocuments } from "react-icons/io5";
 import { IoDocumentsOutline } from "react-icons/io5";
 import { BiExitFullscreen, BiFullscreen } from "react-icons/bi";
 import ComponentPreferences from "./preferences";
-import ComponentThemes from "./themes";
 import ComponentProjects from "./projects";
 import ComponentProfile from "./profile";
 
@@ -35,6 +29,7 @@ export default function ComponentSettings({
   const { t } = useStatus();
   const [currentMenu, setCurrentMenu] = useState("preferences");
   const [fullscreen, setFullscreen] = useState(false);
+  const isMobile = window.innerWidth < 768;
 
   const menuItems = [
     {
@@ -87,22 +82,27 @@ export default function ComponentSettings({
           bgcolor: "var(--background-light)",
           borderRadius: 2,
           width: "100%",
-          maxWidth: fullscreen ? "100%" : "50rem",
+          maxWidth: fullscreen || isMobile ? "100%" : "50rem",
           minHeight: fullscreen ? "100%" : "20rem",
+          maxHeight: fullscreen ? "100%" : "90vh",
           display: "flex",
           flexDirection: "column",
+          margin: fullscreen ? "0" : "1rem",
+          overflow: "auto",
         }}
       >
         <TitleClose>
           <h2 className="title">{t("settings")}</h2>
           <div className="icons-group">
-            <button onClick={setFullScreen}>
-              {fullscreen ? (
-                <BiExitFullscreen fontSize={20} />
-              ) : (
-                <BiFullscreen fontSize={20} />
-              )}
-            </button>
+            {!isMobile && (
+              <button onClick={setFullScreen}>
+                {fullscreen ? (
+                  <BiExitFullscreen fontSize={20} />
+                ) : (
+                  <BiFullscreen fontSize={20} />
+                )}
+              </button>
+            )}
             <button onClick={onClose}>
               <RiCloseLine fontSize={25} />
             </button>
@@ -111,7 +111,7 @@ export default function ComponentSettings({
 
         <Divider />
 
-        <ContentContainer>
+        <ContentContainer fullscreen={fullscreen ? "1" : "0"}>
           <List
             sx={{ borderRight: "1px solid var(--gray2)", minHeight: "100%" }}
           >

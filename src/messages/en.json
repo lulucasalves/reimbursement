@@ -30,5 +30,6 @@
   "profile": "Profile",
   "name": "Name",
   "createdAt": "Created at",
-  "status": "Status"
+  "status": "Status",
+  "monthYear": "Month / Year"
 }

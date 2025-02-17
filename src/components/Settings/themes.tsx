@@ -1,11 +1,9 @@
 import { useStatus } from "~/src/contexts/state";
 import {
   FormControl,
-  FormControlLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
-  Switch,
 } from "@mui/material";
 import { ContainerPreferences, ItemsGroup } from "./styles";
 import ComponentLanguageToggle from "../LanguageToggle";

@@ -31,6 +31,7 @@ export default function ComponentProfile() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          marginBottom: 2,
           gap: 3,
           padding: 2
         }}

@@ -3,10 +3,8 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
-  Paper,
   IconButton,
   TextField,
   Select,
@@ -60,7 +58,7 @@ export default function ComponentProjects() {
     setProjetos(projetos.filter((projeto) => projeto.id !== id));
   };
 
-  const handleEdit = (id: number, campo: keyof Projeto, valor: any) => {
+  const handleEdit = (id: number, campo: keyof Projeto, valor: unknown) => {
     setProjetos(
       projetos.map((projeto) =>
         projeto.id === id ? { ...projeto, [campo]: valor } : projeto
