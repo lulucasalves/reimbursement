@@ -24,6 +24,7 @@ export const SelectGroup = styled.div`
 export const CardsContainer = styled.div`
   display: flex;
   gap: 2rem;
+  margin-bottom: 2rem;
 
   @media (max-width: 768px) {
     flex-wrap: wrap;
@@ -49,4 +50,29 @@ export const CardItem = styled.div`
     font-size: 2rem;
     font-weight: 400;
   }
+`;
+
+export const GraphContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow-x: hidden;
+
+  .graph-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+  }
+`;
+
+export const GraphItem = styled.div`
+  width: 100%;
+  height: 100%;
 `;

@@ -3,8 +3,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { InterfaceProvider } from "../interfaces/provider";
 import { InterfaceMessageTranslation, StatusContextType } from "./interfaces";
-import enTranslate from "~/src/messages/en.json";
-import ptTranslate from "~/src/messages/pt.json";
+import enTranslate from "~/src/locale/en.json";
+import ptTranslate from "~/src/locale/pt.json";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const en: InterfaceMessageTranslation = enTranslate;

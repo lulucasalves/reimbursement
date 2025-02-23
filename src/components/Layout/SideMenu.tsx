@@ -43,10 +43,10 @@ export function ComponentLayoutSideMenu({ menuMobile }: InterfaceSideMenu) {
       path: "events",
     },
     {
-      text: t("reimbursements"),
+      text: t("refunds"),
       icon: <PiMoneyWavyBold fontSize={23} />,
       iconFill: <PiMoneyWavyFill fontSize={23} />,
-      path: "reimbursements",
+      path: "refunds",
     },
     {
       text: t("employees"),

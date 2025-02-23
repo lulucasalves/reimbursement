@@ -24,8 +24,10 @@ export function ComponentChipSelect({
         defaultValue={defaultValue as { label?: string }[]}
         onChange={onChange}
         getOptionLabel={
-          getOptionLabel || ((option: { label?: string }) => option.label || option.toString())
+          getOptionLabel ||
+          ((option: { label?: string }) => option.label || option.toString())
         }
+        size="small"
         renderInput={(params) => (
           <TextField {...params} label={t(label) || label} />
         )}

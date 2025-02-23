@@ -31,8 +31,8 @@ export default function ComponentThemes() {
             onChange={handleChange}
             sx={{ fontSize: "1rem" }}
           >
-            <MenuItem value={1}>Escuro</MenuItem>
-            <MenuItem value={0}>Claro</MenuItem>
+            <MenuItem value={1}>{t("dark")}</MenuItem>
+            <MenuItem value={0}>{t("light")}</MenuItem>
           </Select>
         </FormControl>
       </ItemsGroup>
