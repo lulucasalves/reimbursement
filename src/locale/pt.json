@@ -1,6 +1,7 @@
 {
-  "site_name": "Meu Financeiro",
+  "site_name": "Reembolsos",
   "head_title_auth": "Autenticação",
+  "head_title_events": "Eventos",
   "head_description_auth": "Sessão de Autenticação",
   "head_content_auth": "Sessão de Autenticação",
   "language": "Idioma",
@@ -47,5 +48,12 @@
   "refundsByEvent": "Reembolsos por evento",
   "eventsTitle": "Eventos",
   "eventsDescription": "Gerencie os eventos do sistema",
-  "eventsContent": "Gerencie os eventos do sistema"
+  "eventsContent": "Gerencie os eventos do sistema",
+  "refunds_created": "Reembolsos criados",
+  "refunds_approved": "Reembolsos aprovados",
+  "refunds_pending": "Reembolsos pendentes",
+  "add_item": "Adicionar",
+  "remove_items": "Remover",
+  "init_date": "Data de início",
+  "end_date": "Data de término"
 }

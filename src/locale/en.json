@@ -2,6 +2,7 @@
   "site_name": "My Finance",
   "head_title_auth": "Authentication",
   "head_title_dashboard": "Dashboard",
+  "head_title_events": "Events",
   "head_description_auth": "Authentication Session",
   "head_content_auth": "Authentication Session",
   "language": "Language",
@@ -48,5 +49,12 @@
   "refundsByEvent": "Refunds by event",
   "eventsTitle": "Events",
   "eventsDescription": "Manage the events of the system",
-  "eventsContent": "Manage the events of the system"
+  "eventsContent": "Manage the events of the system",
+  "refunds_created": "Refunds created",
+  "refunds_approved": "Refunds approved",
+  "refunds_pending": "Refunds pending",
+  "add_item": "Add",
+  "remove_items": "Remove",
+  "init_date": "Start date",
+  "end_date": "End date"
 }

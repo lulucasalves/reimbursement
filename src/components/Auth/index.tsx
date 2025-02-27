@@ -81,16 +81,11 @@ export function ComponentAuth() {
                 variant="outlined"
                 loadingPosition="start"
                 fullWidth
+                color="inherit"
                 loading={loading === val.title}
                 key={val.title}
                 startIcon={val.icon}
                 sx={{
-                  borderColor: "var(--foreground)",
-                  color: "var(--foreground)",
-                  "&:hover": {
-                    backgroundColor: "var(--background)",
-                    borderColor: "var(--foreground)",
-                  },
                   fontSize: "0.9rem",
                 }}
               >

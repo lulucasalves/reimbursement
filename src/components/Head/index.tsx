@@ -6,7 +6,7 @@ export function ComponentHead({ title, description, content }: InterfaceHead) {
   const { t } = useStatus();
 
   useEffect(() => {
-    document.title = `${t("site_name")} - ${t(title)}`;
+    document.title = `${t("site_name")} | ${t(title)}`;
 
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {

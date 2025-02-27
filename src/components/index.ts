@@ -8,3 +8,4 @@ export * from "./Layout/HamburgerMenu";
 export * from "./Layout/Container";
 export * from "./Dashboard";
 export * from "./Selects/Chip";
+export * from "./Events";

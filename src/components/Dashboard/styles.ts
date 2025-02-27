@@ -18,6 +18,10 @@ export const SelectGroup = styled.div`
   @media (max-width: 768px) {
     flex-wrap: wrap;
     gap: 1rem;
+
+    .css-1ivgbss {
+      width: 100% !important;
+    }
   }
 `;
 
@@ -68,6 +72,18 @@ export const GraphContainer = styled.div`
     h3 {
       font-size: 1.2rem;
       font-weight: 500;
+    }
+  }
+
+  .table-container {
+    width: 80%;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    .table-container {
+      width: 100%;
     }
   }
 `;

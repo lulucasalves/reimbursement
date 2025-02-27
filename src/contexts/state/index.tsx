@@ -6,7 +6,13 @@ import { InterfaceMessageTranslation, StatusContextType } from "./interfaces";
 import enTranslate from "~/src/locale/en.json";
 import ptTranslate from "~/src/locale/pt.json";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import { ptBR as corePtBR, enUS as coreEnUS } from "@mui/material/locale";
+import {
+  ptBR as dataGridPtBR,
+  enUS as dataGridEnUS,
+} from "@mui/x-data-grid/locales";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 const en: InterfaceMessageTranslation = enTranslate;
 const pt: InterfaceMessageTranslation = ptTranslate;
 
@@ -99,16 +105,20 @@ export const StatusProvider = ({ children }: InterfaceProvider) => {
     return formattedDate;
   }
 
-  const theme = createTheme({
-    colorSchemes: {
-      dark: darkMode,
-    },
-    palette: {
-      primary: {
-        main: "#E33E7F",
+  const theme = createTheme(
+    {
+      colorSchemes: {
+        dark: darkMode,
+      },
+      palette: {
+        primary: {
+          main: "#E33E7F",
+        },
       },
     },
-  });
+    currentLanguage === "pt" ? corePtBR : coreEnUS,
+    currentLanguage === "pt" ? dataGridPtBR : dataGridEnUS
+  );
 
   return (
     <StatusContext.Provider
@@ -126,7 +136,14 @@ export const StatusProvider = ({ children }: InterfaceProvider) => {
         formatDate,
       }}
     >
-      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          adapterLocale={currentLanguage === "pt" ? "pt-br" : "en"}
+        >
+          {children}
+        </LocalizationProvider>
+      </ThemeProvider>
     </StatusContext.Provider>
   );
 };

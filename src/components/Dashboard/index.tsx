@@ -136,7 +136,7 @@ export function ComponentDashboard() {
             {...chartSetting}
           />
         </div>
-        <div style={{ width: "80%" }} className="graph-container">
+        <div className="graph-container table-container">
           <h3>{t("lastRefunds")}</h3>
           <TableContainer component={Paper}>
             <Table size="small" aria-label="a dense table">

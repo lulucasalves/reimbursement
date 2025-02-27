@@ -1,4 +1,4 @@
-import { ComponentLayoutContainer, ComponentHead, ComponentDashboard } from "~/src/components";
+import { ComponentLayoutContainer, ComponentHead, ComponentEvents } from "~/src/components";
 
 export function ViewEvents() {
   return (
@@ -9,7 +9,7 @@ export function ViewEvents() {
         content="head_content_events"
       />
       <ComponentLayoutContainer>
-        <ComponentDashboard />
+        <ComponentEvents />
       </ComponentLayoutContainer>
     </>
   );
