@@ -8,27 +8,36 @@ import {
   GridState,
 } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
-import { Button, MenuItem, Select } from "@mui/material";
+import { Alert, AlertColor, Button, MenuItem, Select } from "@mui/material";
 import { useStatus } from "~/src/contexts/state";
-import { ButtonGroup, Container } from "./styles";
-import { BiPlus, BiTrash } from "react-icons/bi";
+import { ButtonGroup, Container, GroupButtonsSave } from "./styles";
+import { BiPlus, BiSave, BiTrash } from "react-icons/bi";
 import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import { randomUUID } from "crypto";
 
 export default function ComponentTable() {
   const { t } = useStatus();
   const apiRef = useGridApiRef();
-  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [alertComponent, setAlertComponent] = useState({
+    show: true,
+    message: "Teste",
+    severity: "success" as AlertColor,
+  });
   const [rows, setRows] = useState([
     {
-      id: 1,
+      id: "1",
       event: "Visita Avon",
       status: "Ativo",
       refundsCreated: 32,
       refundsApproved: 24,
       refundsPending: 32,
+      initDate: dayjs("2024-05-02"),
+      endDate: dayjs("2024-05-02"),
     },
     {
-      id: 2,
+      id: "2",
       event: "Confraternização de fim de ano",
       status: "Inativo",
       refundsCreated: 144,
@@ -36,7 +45,7 @@ export default function ComponentTable() {
       refundsPending: 2,
     },
     {
-      id: 3,
+      id: "3",
       event: "Aniversário da empresa",
       status: "Inativo",
       refundsCreated: 300,
@@ -44,6 +53,7 @@ export default function ComponentTable() {
       refundsPending: 5,
     },
   ]);
+  const [editRows, setEditRows] = useState([]);
 
   const statusOptions = ["Ativo", "Inativo"];
 
@@ -111,7 +121,7 @@ export default function ComponentTable() {
       renderEditCell: StatusEditCell,
     },
     {
-      field: "initDate  ",
+      field: "initDate",
       headerName: t("init_date"),
       flex: 1,
       minWidth: 200,
@@ -153,7 +163,7 @@ export default function ComponentTable() {
     setRows([
       ...rows,
       {
-        id: rows.length + 10,
+        id: String(rows.length + 100000),
         event: "",
         status: "Ativo",
         refundsPending: 0,
@@ -164,44 +174,68 @@ export default function ComponentTable() {
   }, [rows]);
 
   function onChange(newState: GridState) {
-    console.log(newState.editRows);
+    setEditRows(newState.editRows as any);
+  }
 
-    // setRows(newState.editRows as any);
+  function removeItems() {
+    setRows(rows.filter((row) => !selectedRows.includes(row.id)));
   }
 
   return (
     <Container>
-      <ButtonGroup>
-        <Button
-          onClick={() => addItem()}
-          variant="outlined"
-          loadingPosition="start"
-          fullWidth
-          loading={false}
-          startIcon={<BiPlus />}
-          sx={{
-            fontSize: "0.8rem",
-          }}
-        >
-          {t("add_item")}
-        </Button>
-        {selectedRows.length > 0 && (
+      <GroupButtonsSave>
+        <ButtonGroup>
           <Button
-            onClick={() => {}}
+            onClick={() => addItem()}
             variant="outlined"
             loadingPosition="start"
-            fullWidth
-            color="error"
+            color="inherit"
             loading={false}
-            startIcon={<BiTrash />}
+            startIcon={<BiPlus />}
             sx={{
               fontSize: "0.8rem",
             }}
           >
-            {t("remove_items")}
+            {t("add_item")}
           </Button>
-        )}
-      </ButtonGroup>
+          {selectedRows.length > 0 && (
+            <Button
+              onClick={() => removeItems()}
+              variant="outlined"
+              loadingPosition="start"
+              color="error"
+              loading={false}
+              startIcon={<BiTrash />}
+              sx={{
+                fontSize: "0.8rem",
+              }}
+            >
+              {t("remove_items")}
+            </Button>
+          )}
+        </ButtonGroup>
+        <Button
+          onClick={() => addItem()}
+          variant="contained"
+          loadingPosition="start"
+          loading={false}
+          startIcon={<BiSave />}
+          sx={{
+            fontSize: "0.8rem",
+          }}
+        >
+          {t("save_item")}
+        </Button>
+      </GroupButtonsSave>
+      {alertComponent.show && (
+        <Alert
+          sx={{ marginBottom: 2 }}
+          onClose={() => setAlertComponent({ ...alertComponent, show: false })}
+          severity={alertComponent.severity}
+        >
+          {alertComponent.message}
+        </Alert>
+      )}
       <Paper
         sx={{ height: "calc(100vh - 240px)", width: "100%", overflowX: "auto" }}
       >
@@ -215,7 +249,7 @@ export default function ComponentTable() {
           pageSizeOptions={[15, 50, 100, 1000]}
           checkboxSelection
           onRowSelectionModelChange={(selectionModel) => {
-            setSelectedRows(selectionModel as number[]);
+            setSelectedRows(selectionModel as string[]);
           }}
           disableRowSelectionOnClick
           sx={{

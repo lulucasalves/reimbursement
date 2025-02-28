@@ -56,5 +56,6 @@
   "add_item": "Add",
   "remove_items": "Remove",
   "init_date": "Start date",
-  "end_date": "End date"
+  "end_date": "End date",
+  "save_item": "Save"
 }

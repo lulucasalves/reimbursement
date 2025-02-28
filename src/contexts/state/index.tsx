@@ -15,6 +15,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 const en: InterfaceMessageTranslation = enTranslate;
 const pt: InterfaceMessageTranslation = ptTranslate;
+import "dayjs/locale/pt-br";
 
 const StatusContext = createContext<StatusContextType | undefined>(undefined);
 
@@ -140,6 +141,9 @@ export const StatusProvider = ({ children }: InterfaceProvider) => {
         <LocalizationProvider
           dateAdapter={AdapterDayjs}
           adapterLocale={currentLanguage === "pt" ? "pt-br" : "en"}
+          dateFormats={{
+            normalDate: currentLanguage === "pt" ? "DD/MM/YYYY" : "MM/DD/YYYY",
+          }}
         >
           {children}
         </LocalizationProvider>

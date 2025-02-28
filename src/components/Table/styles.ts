@@ -12,5 +12,13 @@ export const ButtonGroup = styled("div")({
   flexDirection: "row",
   gap: "10px",
   width: "fit-content",
+});
+
+export const GroupButtonsSave = styled("div")({
+  display: "flex",
+  flexDirection: "row",
+  gap: "10px",
+  width: "100%",
   marginBottom: "1rem",
+  justifyContent: "space-between",
 });
