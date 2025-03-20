@@ -13,49 +13,38 @@ import { useStatus } from "~/src/contexts/state";
 import { ButtonGroup, Container, GroupButtonsSave } from "./styles";
 import { BiPlus, BiSave, BiTrash } from "react-icons/bi";
 import { DatePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
-import { randomUUID } from "crypto";
+import { generateHash } from "../../utils";
 
-export default function ComponentTable() {
+export default function ComponentTable({
+  data,
+  options,
+  columns: columnsBrute,
+}) {
+  const cellRenderer = {
+    select: StatusEditCell,
+    date: DateEditCell,
+  };
+
+  const columns = columnsBrute.map((val) => ({
+    ...val,
+    renderEditCell: cellRenderer[val.renderEditCell],
+  }));
+
   const { t } = useStatus();
   const apiRef = useGridApiRef();
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [alertComponent, setAlertComponent] = useState({
-    show: true,
-    message: "Teste",
+    show: false,
+    message: "",
     severity: "success" as AlertColor,
   });
-  const [rows, setRows] = useState([
-    {
-      id: "1",
-      event: "Visita Avon",
-      status: "Ativo",
-      refundsCreated: 32,
-      refundsApproved: 24,
-      refundsPending: 32,
-      initDate: dayjs("2024-05-02"),
-      endDate: dayjs("2024-05-02"),
-    },
-    {
-      id: "2",
-      event: "Confraternização de fim de ano",
-      status: "Inativo",
-      refundsCreated: 144,
-      refundsApproved: 122,
-      refundsPending: 2,
-    },
-    {
-      id: "3",
-      event: "Aniversário da empresa",
-      status: "Inativo",
-      refundsCreated: 300,
-      refundsApproved: 283,
-      refundsPending: 5,
-    },
-  ]);
+
+  const [rows, setRows] = useState(data);
   const [editRows, setEditRows] = useState([]);
 
-  const statusOptions = ["Ativo", "Inativo"];
+  useEffect(() => {
+    setRows(data);
+  }, [data]);
 
   function StatusEditCell(props: GridRenderEditCellParams) {
     const { id, field, value } = props;
@@ -72,9 +61,9 @@ export default function ComponentTable() {
         fullWidth
         variant="standard"
       >
-        {statusOptions.map((option) => (
-          <MenuItem key={option} value={option}>
-            {option}
+        {options[field].map((option) => (
+          <MenuItem key={option.id} value={option.id}>
+            {option.text}
           </MenuItem>
         ))}
       </Select>
@@ -100,52 +89,8 @@ export default function ComponentTable() {
     );
   }
 
-  const columns: GridColDef[] = [
-    {
-      field: "event",
-      headerName: t("event"),
-      flex: 1,
-      minWidth: 150,
-      align: "left",
-      headerAlign: "left",
-      editable: true,
-    },
-    {
-      field: "status",
-      headerName: t("status"),
-      flex: 1,
-      align: "left",
-      minWidth: 150,
-      headerAlign: "left",
-      editable: true,
-      renderEditCell: StatusEditCell,
-    },
-    {
-      field: "initDate",
-      headerName: t("init_date"),
-      flex: 1,
-      minWidth: 200,
-      align: "left",
-      headerAlign: "left",
-      editable: true,
-      renderEditCell: DateEditCell,
-    },
-    {
-      field: "endDate",
-      headerName: t("end_date"),
-      flex: 1,
-      minWidth: 200,
-      align: "left",
-      headerAlign: "left",
-      editable: true,
-      renderEditCell: DateEditCell,
-    },
-  ];
-
-  // Criar um estado para definir todas as células como editáveis
   const [cellModesModel, setCellModesModel] = useState<GridCellModesModel>({});
 
-  // Ativa o modo de edição para todas as células ao montar o componente
   useEffect(() => {
     const initialCellModes: any = {};
     rows.forEach((row) => {
@@ -163,9 +108,9 @@ export default function ComponentTable() {
     setRows([
       ...rows,
       {
-        id: String(rows.length + 100000),
+        id: generateHash(),
         event: "",
-        status: "Ativo",
+        status: 1,
         refundsPending: 0,
         refundsCreated: 0,
         refundsApproved: 0,
@@ -179,6 +124,20 @@ export default function ComponentTable() {
 
   function removeItems() {
     setRows(rows.filter((row) => !selectedRows.includes(row.id)));
+  }
+
+  function saveChanges() {
+    if (editRows[1]) {
+      const keys = Object.keys(editRows[1]);
+
+      console.log(keys);
+    } else {
+      setAlertComponent({
+        show: true,
+        message: t("not_items_to_edit"),
+        severity: "warning",
+      });
+    }
   }
 
   return (
@@ -215,7 +174,7 @@ export default function ComponentTable() {
           )}
         </ButtonGroup>
         <Button
-          onClick={() => addItem()}
+          onClick={() => saveChanges()}
           variant="contained"
           loadingPosition="start"
           loading={false}

@@ -56,5 +56,6 @@
   "remove_items": "Remover",
   "init_date": "Data de início",
   "end_date": "Data de término",
-  "save_item": "Salvar"
+  "save_item": "Salvar",
+  "not_items_to_edit": "Nenhum item foi editado ou adicionado"
 }
