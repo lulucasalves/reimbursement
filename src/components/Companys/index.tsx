@@ -1,23 +1,31 @@
 import { useStatus } from "~/src/contexts/state";
 import { Container } from "./styles";
 import ComponentTable from "../Table";
-import dayjs from "dayjs";
 
-export function ComponentEvents() {
+export function ComponentCompanys() {
   const { t } = useStatus();
   const options = {
     status: [
       { id: "Ativo", text: "Ativo" },
       { id: "Inativo", text: "Inativo" },
     ],
+    currency: [
+      { id: "R$", text: "R$" },
+      { id: "$", text: "$" },
+    ],
+    monthFormat: [
+      { id: "DD/MM/YYYY", text: "DD/MM/YYYY" },
+      { id: "MM/DD/YYYY", text: "MM/DD/YYYY" },
+    ],
   };
+
   const data = [
     {
       id: "4435345fdfsd",
-      event: "Visita Avon",
+      company: "Empresa 1",
       status: "Ativo",
-      initDate: dayjs("2024-05-02"),
-      endDate: dayjs("2024-05-02"),
+      currency: "R$",
+      monthFormat: "DD/MM/YYYY",
     },
   ];
 
@@ -32,8 +40,8 @@ export function ComponentEvents() {
       editable: false,
     },
     {
-      field: "event",
-      headerName: t("event"),
+      field: "company",
+      headerName: t("company"),
       flex: 1,
       minWidth: 150,
       align: "left",
@@ -51,30 +59,30 @@ export function ComponentEvents() {
       renderEditCell: "select",
     },
     {
-      field: "initDate",
-      headerName: t("init_date"),
+      field: "currency",
+      headerName: t("currency"),
       flex: 1,
-      minWidth: 200,
       align: "left",
+      minWidth: 150,
       headerAlign: "left",
       editable: true,
-      renderEditCell: "date",
+      renderEditCell: "select",
     },
     {
-      field: "endDate",
-      headerName: t("end_date"),
+      field: "monthFormat",
+      headerName: t("month_format"),
       flex: 1,
-      minWidth: 200,
       align: "left",
+      minWidth: 150,
       headerAlign: "left",
       editable: true,
-      renderEditCell: "date",
+      renderEditCell: "select",
     },
   ];
 
   return (
     <Container>
-      <h2 className="title">{t("events")}</h2>
+      <h2 className="title">{t("companys")}</h2>
       <ComponentTable
         options={options}
         data={data}

@@ -9,7 +9,8 @@
   --foreground: #171717;
   --gray1: rgba(0, 0, 0, 0.8);
   --gray2: rgba(0, 0, 0, 0.2);
-  --error: #ff3333;
+  --success2: rgba(145, 255, 145, 0.1);
+  --success2hover: rgba(145, 255, 145, 0.1);
 }
 
 .dark {
@@ -18,10 +19,20 @@
   --foreground: #ededed;
   --gray1: rgba(255, 255, 255, 0.8);
   --gray2: rgba(255, 255, 255, 0.2);
+  --success2: rgba(145, 255, 145, 0.1);
+  --success2hover: rgba(145, 255, 145, 0.1);
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: roboto, sans-serif;
+}
+
+.new-row {
+  background-color: var(--success2);
+}
+
+.new-row:hover {
+  background-color: var(--success2hover) !important;
 }

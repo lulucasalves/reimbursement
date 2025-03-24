@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
   List,
@@ -22,6 +22,7 @@ import {
 import { BsBarChartLine, BsBarChartLineFill } from "react-icons/bs";
 import { MdOutlinePeopleOutline, MdPeople } from "react-icons/md";
 import { PiMoneyWavyBold, PiMoneyWavyFill } from "react-icons/pi";
+import { FaRegBuilding, FaBuilding } from "react-icons/fa";
 
 export function ComponentLayoutSideMenu({ menuMobile }: InterfaceSideMenu) {
   const [expanded, setExpanded] = useState(true);
@@ -54,7 +55,26 @@ export function ComponentLayoutSideMenu({ menuMobile }: InterfaceSideMenu) {
       iconFill: <MdPeople fontSize={23} />,
       path: "employees",
     },
+    {
+      text: t("companys"),
+      icon: <FaRegBuilding fontSize={22} />,
+      iconFill: <FaBuilding fontSize={22} />,
+      path: "companys",
+    },
   ];
+
+  function changeStateExpanded() {
+    localStorage.setItem("menu_expanded", !expanded ? "1" : "0");
+    setExpanded(!expanded);
+  }
+
+  useEffect(() => {
+    const searchLocalStorage = localStorage.getItem("menu_expanded");
+
+    if (searchLocalStorage === "1" || searchLocalStorage === "0") {
+      setExpanded(searchLocalStorage === "1");
+    }
+  }, []);
 
   return (
     <ContainerSideMenu
@@ -68,7 +88,7 @@ export function ComponentLayoutSideMenu({ menuMobile }: InterfaceSideMenu) {
     >
       <IconButton
         className="iconExpanded"
-        onClick={() => setExpanded(!expanded)}
+        onClick={changeStateExpanded}
         sx={{ margin: "8px", marginTop: "80px" }}
       >
         {expanded ? (

@@ -17,8 +17,8 @@ export const AuthProvider = ({ children }: InterfaceProvider) => {
   const [token, setToken] = useState("");
   const [company, setCompany] = useState(1);
   const [companies, setCompanies] = useState([
-    { id: 1, name: "Projeto 1" },
-    { id: 2, name: "Projeto 2" },
+    { id: 1, name: "Empresa 1" },
+    { id: 2, name: "Empresa 2" },
   ]);
   const router = useRouter();
 
@@ -44,8 +44,8 @@ export const AuthProvider = ({ children }: InterfaceProvider) => {
   function changeCompany(value: number) {
     setCompany(value);
     setCompanies([
-      { id: 1, name: "Projeto 1" },
-      { id: 2, name: "Projeto 2" },
+      { id: 1, name: "Empresa 1" },
+      { id: 2, name: "Empresa 2" },
     ]);
   }
 

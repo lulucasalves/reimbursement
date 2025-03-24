@@ -1,17 +1,24 @@
 import { useState, useEffect, useCallback } from "react";
 import {
   DataGrid,
-  GridColDef,
   GridRenderEditCellParams,
   useGridApiRef,
   GridCellModesModel,
-  GridState,
+  GridEditingState,
+  GridFilterModel,
 } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
-import { Alert, AlertColor, Button, MenuItem, Select } from "@mui/material";
+import {
+  Alert,
+  AlertColor,
+  Button,
+  Chip,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import { useStatus } from "~/src/contexts/state";
 import { ButtonGroup, Container, GroupButtonsSave } from "./styles";
-import { BiPlus, BiSave, BiTrash } from "react-icons/bi";
+import { BiDuplicate, BiPlus, BiSave, BiTrash } from "react-icons/bi";
 import { DatePicker } from "@mui/x-date-pickers";
 import { generateHash } from "../../utils";
 
@@ -19,10 +26,32 @@ export default function ComponentTable({
   data,
   options,
   columns: columnsBrute,
+  invisibleColumns = {},
+  defaultAdd = {},
 }) {
+  const personalizedStyle = {
+    border: 0,
+    "& .css-1b619uk-MuiInputBase-root-MuiInput-root-MuiSelect-root, .css-1qwk5lv-MuiInputBase-root-MuiInput-root-MuiSelect-root":
+      {
+        fontSize: "0.88rem",
+      },
+    ".css-1q6x537-MuiInputBase-root-MuiInput-root::before, & .css-1b619uk-MuiInputBase-root-MuiInput-root-MuiSelect-root:hover::before, .css-1b619uk-MuiInputBase-root-MuiInput-root-MuiSelect-root::before,.css-1qwk5lv-MuiInputBase-root-MuiInput-root-MuiSelect-root:hover:not(.Mui-disabled, .Mui-error):before, .css-1qwk5lv-MuiInputBase-root-MuiInput-root-MuiSelect-root::before":
+      {
+        borderBottom: "none",
+      },
+    "& .MuiDataGrid-cell.MuiDataGrid-cell--editing": {
+      boxShadow: "none",
+    },
+    "& .MuiDataGrid-cell--editing": {
+      bgcolor: "transparent !important",
+    },
+  };
+
   const cellRenderer = {
     select: StatusEditCell,
     date: DateEditCell,
+    chip: ChipCell,
+    button: ButtonCell,
   };
 
   const columns = columnsBrute.map((val) => ({
@@ -38,13 +67,19 @@ export default function ComponentTable({
     message: "",
     severity: "success" as AlertColor,
   });
-
   const [rows, setRows] = useState(data);
-  const [editRows, setEditRows] = useState([]);
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({
+    items: [],
+  });
+  const [sortModel, setSortModel] = useState([]);
+  const [loadedData, setLoadedData] = useState(false);
 
   useEffect(() => {
-    setRows(data);
-  }, [data]);
+    if (!loadedData) {
+      setRows(data);
+      setLoadedData(true);
+    }
+  }, [data, loadedData]);
 
   function StatusEditCell(props: GridRenderEditCellParams) {
     const { id, field, value } = props;
@@ -54,14 +89,17 @@ export default function ComponentTable({
       apiRef.current.setEditCellValue({ id, field, value: newValue });
     };
 
+    const availableOptions = options[field]?.map((option) => option.id) || [];
+    const validValue = availableOptions.includes(value) ? value : "";
+
     return (
       <Select
-        value={value}
+        value={validValue}
         onChange={handleChange}
         fullWidth
         variant="standard"
       >
-        {options[field].map((option) => (
+        {options[field]?.map((option) => (
           <MenuItem key={option.id} value={option.id}>
             {option.text}
           </MenuItem>
@@ -89,6 +127,50 @@ export default function ComponentTable({
     );
   }
 
+  function ChipCell(props: GridRenderEditCellParams) {
+    const { field, value, row } = props;
+
+    return (
+      <Chip
+        label={t(value)}
+        color={row[columns.find((val) => val.field === field).color]}
+        sx={{ fontSize: "13px", height: "28px", alignSelf: "center" }}
+      />
+    );
+  }
+
+  function ButtonCell(props: GridRenderEditCellParams) {
+    const { field, row } = props;
+
+    const item = apiRef.current.state.editRows[row.id];
+    Object.keys(item).forEach((key) => {
+      row[key] = item[key]?.value || null;
+    });
+
+    return (
+      <Button
+        onClick={() => {
+          if (row.id.includes("new")) {
+            setAlertComponent({
+              show: true,
+              message: columns.find((val) => val.field === field).warnText,
+              severity: "warning",
+            });
+          } else {
+            return columns.find((val) => val.field === field).action(row);
+          }
+        }}
+        variant="contained"
+        loadingPosition="start"
+        color="primary"
+        loading={false}
+        sx={{ fontSize: "12px", height: "28px", alignSelf: "center" }}
+      >
+        {field}
+      </Button>
+    );
+  }
+
   const [cellModesModel, setCellModesModel] = useState<GridCellModesModel>({});
 
   useEffect(() => {
@@ -105,39 +187,151 @@ export default function ComponentTable({
   }, [rows]);
 
   const addItem = useCallback(() => {
-    setRows([
-      ...rows,
+    setRows((prev) => [
+      ...prev,
       {
         id: generateHash(),
-        event: "",
-        status: 1,
-        refundsPending: 0,
-        refundsCreated: 0,
-        refundsApproved: 0,
+        ...defaultAdd,
       },
     ]);
-  }, [rows]);
+  }, [rows, defaultAdd]);
 
-  function onChange(newState: GridState) {
-    setEditRows(newState.editRows as any);
+  function compareChanges(list: any[], editRows: GridEditingState) {
+    const transformedList = Object.keys(editRows).map((id) => {
+      const item = editRows[id];
+      const transformedItem = { id };
+      Object.keys(item).forEach((key) => {
+        transformedItem[key] = item[key]?.value || null;
+      });
+      return transformedItem;
+    });
+
+    const newItems: any[] = [];
+    const editedItems: any[] = [];
+    const removedItems: any[] = [];
+
+    const map = new Map(transformedList.map((item) => [item.id, item]));
+    const listMap = new Map(list.map((item) => [item.id, item]));
+
+    for (const [id, item] of map.entries()) {
+      if (!listMap.has(id)) {
+        newItems.push(item);
+      } else {
+        const listItem = listMap.get(id);
+        const differences = shallowNotEqual(item, listItem);
+
+        if (differences) {
+          editedItems.push(differences);
+        }
+      }
+    }
+
+    for (const [id, item] of listMap.entries()) {
+      if (!map.has(id)) {
+        removedItems.push(item);
+      }
+    }
+
+    return {
+      newItems,
+      editedItems,
+      removedItems,
+    };
+  }
+
+  function shallowNotEqual(obj1: any, obj2: any) {
+    let editedItems = { id: obj1.id };
+
+    for (const key in obj1) {
+      if (obj1[key] !== obj2[key]) {
+        editedItems = { ...editedItems, [key]: obj1[key] };
+      }
+    }
+
+    if (Object.keys(editedItems).length > 1) return editedItems;
+
+    return false;
   }
 
   function removeItems() {
     setRows(rows.filter((row) => !selectedRows.includes(row.id)));
+    setSelectedRows([]);
+  }
+
+  function duplicateItems(id) {
+    const item = apiRef.current.state.editRows[id];
+    const row = {};
+    Object.keys(item).forEach((key) => {
+      row[key] = item[key]?.value || null;
+    });
+
+    setRows((prev) => [
+      ...prev,
+      {
+        ...row,
+        id: generateHash(),
+        ...defaultAdd,
+      },
+    ]);
   }
 
   function saveChanges() {
-    if (editRows[1]) {
-      const keys = Object.keys(editRows[1]);
+    const result = compareChanges(data, apiRef.current.state.editRows);
 
-      console.log(keys);
-    } else {
+    if (
+      !result.editedItems.length &&
+      !result.removedItems.length &&
+      !result.newItems.length
+    ) {
       setAlertComponent({
         show: true,
         message: t("not_items_to_edit"),
         severity: "warning",
       });
     }
+  }
+
+  useEffect(() => {
+    const secondPath = window.location.pathname
+      .split("/")
+      .slice(2, 100)
+      .join("-");
+
+    const savedFilterModel = localStorage.getItem(`table_filter_${secondPath}`);
+    if (savedFilterModel) {
+      setFilterModel(JSON.parse(savedFilterModel));
+    }
+
+    const savedSortModel = localStorage.getItem(`table_sort_${secondPath}`);
+    if (savedSortModel) {
+      setSortModel(JSON.parse(savedSortModel));
+    }
+  }, []);
+
+  function handleFilterModelChange(newFilterModel: GridFilterModel) {
+    const secondPath = window.location.pathname
+      .split("/")
+      .slice(2, 100)
+      .join("-");
+
+    setFilterModel(newFilterModel);
+    localStorage.setItem(
+      `table_filter_${secondPath}`,
+      JSON.stringify(newFilterModel)
+    );
+  }
+
+  function handleSortModelChange(newSortModel) {
+    const secondPath = window.location.pathname
+      .split("/")
+      .slice(2, 100)
+      .join("-");
+
+    setSortModel(newSortModel);
+    localStorage.setItem(
+      `table_sort_${secondPath}`,
+      JSON.stringify(newSortModel)
+    );
   }
 
   return (
@@ -157,6 +351,21 @@ export default function ComponentTable({
           >
             {t("add_item")}
           </Button>
+          {selectedRows.length === 1 && (
+            <Button
+              onClick={() => duplicateItems(selectedRows[0])}
+              variant="outlined"
+              loadingPosition="start"
+              color="inherit"
+              loading={false}
+              startIcon={<BiDuplicate />}
+              sx={{
+                fontSize: "0.8rem",
+              }}
+            >
+              {t("duplicate_items")}
+            </Button>
+          )}
           {selectedRows.length > 0 && (
             <Button
               onClick={() => removeItems()}
@@ -204,33 +413,24 @@ export default function ComponentTable({
           columns={columns}
           initialState={{
             pagination: { paginationModel: { page: 0, pageSize: 100 } },
+            columns: { columnVisibilityModel: invisibleColumns },
           }}
+          filterModel={filterModel}
+          sortModel={sortModel}
           pageSizeOptions={[15, 50, 100, 1000]}
           checkboxSelection
           onRowSelectionModelChange={(selectionModel) => {
             setSelectedRows(selectionModel as string[]);
           }}
           disableRowSelectionOnClick
-          sx={{
-            border: 0,
-            "& .css-1b619uk-MuiInputBase-root-MuiInput-root-MuiSelect-root, .css-1qwk5lv-MuiInputBase-root-MuiInput-root-MuiSelect-root":
-              {
-                fontSize: "0.88rem",
-              },
-            ".css-1q6x537-MuiInputBase-root-MuiInput-root::before, & .css-1b619uk-MuiInputBase-root-MuiInput-root-MuiSelect-root:hover::before, .css-1b619uk-MuiInputBase-root-MuiInput-root-MuiSelect-root::before,.css-1qwk5lv-MuiInputBase-root-MuiInput-root-MuiSelect-root:hover:not(.Mui-disabled, .Mui-error):before, .css-1qwk5lv-MuiInputBase-root-MuiInput-root-MuiSelect-root::before":
-              {
-                borderBottom: "none",
-              },
-            "& .MuiDataGrid-cell.MuiDataGrid-cell--editing": {
-              boxShadow: "none",
-            },
-            "& .MuiDataGrid-cell--editing": {
-              bgcolor: "transparent !important",
-            },
-          }}
+          sx={personalizedStyle}
           density="compact"
           cellModesModel={cellModesModel}
-          onStateChange={onChange}
+          onFilterModelChange={handleFilterModelChange}
+          onSortModelChange={handleSortModelChange}
+          getRowClassName={(params) => {
+            return String(params.id).includes("new") ? "new-row" : "";
+          }}
         />
       </Paper>
     </Container>

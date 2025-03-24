@@ -15,18 +15,18 @@ import { GoPlus } from "react-icons/go";
 import { FiTrash2 } from "react-icons/fi";
 import { useStatus } from "~/src/contexts/state";
 
-interface Projeto {
+interface Empresa {
   id: number;
   nome: string;
   createdAt: string;
   status: "ativo" | "inativo";
 }
 
-export default function ComponentProjects() {
-  const [projetos, setProjetos] = useState<Projeto[]>([
+export default function ComponentCompanys() {
+  const [empresas, setEmpresas] = useState<Empresa[]>([
     {
       id: 1,
-      nome: "Projeto 1",
+      nome: "Empresa 1",
       createdAt: "2025-01-12 - 22:34:22",
       status: "ativo",
     },
@@ -35,7 +35,7 @@ export default function ComponentProjects() {
 
   const handleAdd = () => {
     const novoId =
-      projetos.length > 0 ? Math.max(...projetos.map((p) => p.id)) + 1 : 1;
+      empresas.length > 0 ? Math.max(...empresas.map((p) => p.id)) + 1 : 1;
     const dataAtual = new Date()
       .toLocaleString("pt-BR", {
         year: "numeric",
@@ -48,20 +48,20 @@ export default function ComponentProjects() {
       .replace(/(\d+)\/(\d+)\/(\d+)/, "$3-$2-$1")
       .replace(",", " - ");
 
-    setProjetos([
-      ...projetos,
+    setEmpresas([
+      ...empresas,
       { id: novoId, nome: "", createdAt: dataAtual, status: "ativo" },
     ]);
   };
 
   const handleDelete = (id: number) => {
-    setProjetos(projetos.filter((projeto) => projeto.id !== id));
+    setEmpresas(empresas.filter((empresa) => empresa.id !== id));
   };
 
-  const handleEdit = (id: number, campo: keyof Projeto, valor: unknown) => {
-    setProjetos(
-      projetos.map((projeto) =>
-        projeto.id === id ? { ...projeto, [campo]: valor } : projeto
+  const handleEdit = (id: number, campo: keyof Empresa, valor: unknown) => {
+    setEmpresas(
+      empresas.map((empresa) =>
+        empresa.id === id ? { ...empresa, [campo]: valor } : empresa
       )
     );
   };
@@ -82,23 +82,23 @@ export default function ComponentProjects() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {projetos.map((projeto) => (
-            <TableRow key={projeto.id}>
+          {empresas.map((empresa) => (
+            <TableRow key={empresa.id}>
               <TableCell>
                 <TextField
                   fullWidth
                   variant="standard"
-                  value={projeto.nome}
+                  value={empresa.nome}
                   onChange={(e) =>
-                    handleEdit(projeto.id, "nome", e.target.value)
+                    handleEdit(empresa.id, "nome", e.target.value)
                   }
                 />
               </TableCell>
               <TableCell>
                 <Select
-                  value={projeto.status}
+                  value={empresa.status}
                   onChange={(e) =>
-                    handleEdit(projeto.id, "status", e.target.value)
+                    handleEdit(empresa.id, "status", e.target.value)
                   }
                   variant="standard"
                   size="small"
@@ -108,9 +108,9 @@ export default function ComponentProjects() {
                   <MenuItem value="inativo">Inativo</MenuItem>
                 </Select>
               </TableCell>
-              <TableCell>{formatDate(projeto.createdAt)}</TableCell>
+              <TableCell>{formatDate(empresa.createdAt)}</TableCell>
               <TableCell align="right">
-                <IconButton onClick={() => handleDelete(projeto.id)}>
+                <IconButton onClick={() => handleDelete(empresa.id)}>
                   <FiTrash2 fontSize={20} />
                 </IconButton>
               </TableCell>

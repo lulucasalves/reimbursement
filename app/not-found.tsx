@@ -14,6 +14,6 @@ export default function NotFoundPage() {
     if (validateToken()) {
       router.push(`/${currentLanguage}/dashboard`);
     } else router.push(`/${currentLanguage}/auth`);
-  }, []);
+  }, [currentLanguage, router, validateToken]);
   return <p>hi</p>;
 }

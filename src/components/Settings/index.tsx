@@ -15,11 +15,8 @@ import { useState } from "react";
 import { RiCloseLine, RiUserSettingsFill } from "react-icons/ri";
 import { RiUserSettingsLine } from "react-icons/ri";
 import { MdOutlinePerson, MdPerson } from "react-icons/md";
-import { IoDocuments } from "react-icons/io5";
-import { IoDocumentsOutline } from "react-icons/io5";
 import { BiExitFullscreen, BiFullscreen } from "react-icons/bi";
 import ComponentPreferences from "./preferences";
-import ComponentProjects from "./projects";
 import ComponentProfile from "./profile";
 
 export default function ComponentSettings({
@@ -38,20 +35,6 @@ export default function ComponentSettings({
       iconFill: <RiUserSettingsFill fontSize={22} />,
       path: "preferences",
       component: <ComponentPreferences />,
-    },
-    // {
-    //   text: t("theme"),
-    //   icon: <MdOutlineBorderColor fontSize={22} />,
-    //   iconFill: <MdBorderColor fontSize={22} />,
-    //   path: "theme",
-    //   component: <ComponentThemes />,
-    // },
-    {
-      text: t("projects"),
-      icon: <IoDocumentsOutline fontSize={22} />,
-      iconFill: <IoDocuments fontSize={22} />,
-      path: "projects",
-      component: <ComponentProjects />,
     },
     {
       text: t("profile"),
