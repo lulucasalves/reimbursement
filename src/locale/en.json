@@ -79,5 +79,14 @@
   "edit_permissions": "Edit permissions",
   "save_new_row_to_edit_permissions": "Save the newly added data to be able to edit your permissions",
   "phone": "Phone",
-  "document": "Document"
+  "document": "Document",
+  "confirm_changes": "Confirm changes",
+  "created_items": "Created",
+  "confirm": "Confirm",
+  "cancel_changes": "Cancel changes",
+  "edited_items": "Edited",
+  "removed_items": "Removed",
+  "required_column": "This column cannot be empty",
+  "unique_column": "There cannot be duplicate values in this column",
+  "null": "Null"
 }

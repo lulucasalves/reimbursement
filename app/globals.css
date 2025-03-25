@@ -29,10 +29,10 @@ body {
   font-family: roboto, sans-serif;
 }
 
-.new-row {
+.new_row {
   background-color: var(--success2);
 }
 
-.new-row:hover {
+.new_row:hover {
   background-color: var(--success2hover) !important;
 }

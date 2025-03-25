@@ -27,6 +27,7 @@ export function ComponentEmployeesTab() {
       document: "848.486.484-23",
       verification: "Verificado",
       verificationColor: "success",
+      [t("edit_groups")]: null,
     },
   ];
 
@@ -48,6 +49,8 @@ export function ComponentEmployeesTab() {
       align: "left",
       headerAlign: "left",
       editable: true,
+      required: true,
+      unique: true,
     },
     {
       field: "email",
@@ -57,6 +60,8 @@ export function ComponentEmployeesTab() {
       align: "left",
       headerAlign: "left",
       editable: true,
+      required: true,
+      unique: true,
     },
     {
       field: "phone",
@@ -75,6 +80,8 @@ export function ComponentEmployeesTab() {
       align: "left",
       headerAlign: "left",
       editable: true,
+      required: true,
+      unique: true,
     },
     {
       field: "verification",

@@ -39,6 +39,8 @@ export function ComponentEvents() {
       align: "left",
       headerAlign: "left",
       editable: true,
+      required: true,
+      unique: true,
     },
     {
       field: "status",
@@ -49,6 +51,7 @@ export function ComponentEvents() {
       headerAlign: "left",
       editable: true,
       renderEditCell: "select",
+      required: true,
     },
     {
       field: "initDate",
@@ -59,6 +62,7 @@ export function ComponentEvents() {
       headerAlign: "left",
       editable: true,
       renderEditCell: "date",
+      required: true,
     },
     {
       field: "endDate",
@@ -69,6 +73,7 @@ export function ComponentEvents() {
       headerAlign: "left",
       editable: true,
       renderEditCell: "date",
+      required: true,
     },
   ];
 

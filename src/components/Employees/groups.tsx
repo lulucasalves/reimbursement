@@ -23,6 +23,7 @@ export function ComponentGroupsTab() {
     {
       id: "4435345fdfsd",
       group: "Administrador",
+      [t("edit_permissions")]: null,
     },
   ];
 
@@ -44,6 +45,8 @@ export function ComponentGroupsTab() {
       align: "left",
       headerAlign: "left",
       editable: true,
+      required: true,
+      unique: true,
     },
     {
       field: t("edit_permissions"),

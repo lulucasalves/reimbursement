@@ -47,6 +47,8 @@ export function ComponentCompanys() {
       align: "left",
       headerAlign: "left",
       editable: true,
+      required: true,
+      unique: true,
     },
     {
       field: "status",
@@ -57,6 +59,7 @@ export function ComponentCompanys() {
       headerAlign: "left",
       editable: true,
       renderEditCell: "select",
+      required: true,
     },
     {
       field: "currency",
@@ -67,6 +70,7 @@ export function ComponentCompanys() {
       headerAlign: "left",
       editable: true,
       renderEditCell: "select",
+      required: true,
     },
     {
       field: "monthFormat",
@@ -77,6 +81,7 @@ export function ComponentCompanys() {
       headerAlign: "left",
       editable: true,
       renderEditCell: "select",
+      required: true,
     },
   ];
 

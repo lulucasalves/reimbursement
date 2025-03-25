@@ -21,6 +21,7 @@ import { ButtonGroup, Container, GroupButtonsSave } from "./styles";
 import { BiDuplicate, BiPlus, BiSave, BiTrash } from "react-icons/bi";
 import { DatePicker } from "@mui/x-date-pickers";
 import { generateHash } from "../../utils";
+import { ComponentTableChangesDialog } from "./changesDialog";
 
 export default function ComponentTable({
   data,
@@ -73,6 +74,13 @@ export default function ComponentTable({
   });
   const [sortModel, setSortModel] = useState([]);
   const [loadedData, setLoadedData] = useState(false);
+  const [tableChangesDialog, setTableChangesDialog] = useState(false);
+  const [changes, setChanges] = useState({});
+  const [removedRows, setRemovedRows] = useState<string[]>([]);
+
+  function closeChangesDialog() {
+    setTableChangesDialog(false);
+  }
 
   useEffect(() => {
     if (!loadedData) {
@@ -150,7 +158,7 @@ export default function ComponentTable({
     return (
       <Button
         onClick={() => {
-          if (row.id.includes("new")) {
+          if (row.id.includes("new_")) {
             setAlertComponent({
               show: true,
               message: columns.find((val) => val.field === field).warnText,
@@ -208,7 +216,6 @@ export default function ComponentTable({
 
     const newItems: any[] = [];
     const editedItems: any[] = [];
-    const removedItems: any[] = [];
 
     const map = new Map(transformedList.map((item) => [item.id, item]));
     const listMap = new Map(list.map((item) => [item.id, item]));
@@ -226,16 +233,11 @@ export default function ComponentTable({
       }
     }
 
-    for (const [id, item] of listMap.entries()) {
-      if (!map.has(id)) {
-        removedItems.push(item);
-      }
-    }
-
     return {
-      newItems,
-      editedItems,
-      removedItems,
+      newItems: newItems.filter((val) => !removedRows.includes(val.id)),
+      editedItems: editedItems.filter((val) => !removedRows.includes(val.id)),
+      removedItems: removedRows.filter((val) => !val.includes("new_")),
+      allChangedData: transformedList,
     };
   }
 
@@ -255,6 +257,7 @@ export default function ComponentTable({
 
   function removeItems() {
     setRows(rows.filter((row) => !selectedRows.includes(row.id)));
+    setRemovedRows((prev) => [...prev, ...selectedRows]);
     setSelectedRows([]);
   }
 
@@ -288,6 +291,13 @@ export default function ComponentTable({
         message: t("not_items_to_edit"),
         severity: "warning",
       });
+    } else {
+      const isValid = dataValidation(result.allChangedData, result);
+
+      if (isValid) {
+        setChanges(result);
+        setTableChangesDialog(true);
+      }
     }
   }
 
@@ -334,8 +344,56 @@ export default function ComponentTable({
     );
   }
 
+  function dataValidation(editedData, editedDataDetails) {
+    const idsToSearch = [
+      ...editedDataDetails.newItems.map((val) => val.id),
+      ...editedDataDetails.editedItems.map((val) => val.id),
+    ];
+    const requiredColumns = columns.filter((val) => val.required);
+
+    for (const id of idsToSearch) {
+      const values = editedData.find((val) => val.id === id);
+      for (const column of requiredColumns) {
+        if (!values[column.field]) {
+          setAlertComponent({
+            show: true,
+            message: `${column.headerName} - ${t("required_column")}`,
+            severity: "error",
+          });
+          return false;
+        }
+
+        if (column.unique) {
+          const searchedValueColumn = editedData.filter(
+            (val) => val[column.field] === values[column.field]
+          );
+
+          if (searchedValueColumn.length > 1) {
+            setAlertComponent({
+              show: true,
+              message: `${column.headerName} ("${values[column.field]}") - ${t(
+                "unique_column"
+              )}`,
+              severity: "error",
+            });
+            return false;
+          }
+        }
+      }
+    }
+
+    return true;
+  }
+
   return (
     <Container>
+      <ComponentTableChangesDialog
+        isOpen={tableChangesDialog}
+        onClose={closeChangesDialog}
+        currentData={data}
+        editedItems={changes}
+        columns={columns}
+      />
       <GroupButtonsSave>
         <ButtonGroup>
           <Button
@@ -429,7 +487,7 @@ export default function ComponentTable({
           onFilterModelChange={handleFilterModelChange}
           onSortModelChange={handleSortModelChange}
           getRowClassName={(params) => {
-            return String(params.id).includes("new") ? "new-row" : "";
+            return String(params.id).includes("new_") ? "new_row" : "";
           }}
         />
       </Paper>
