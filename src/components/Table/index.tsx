@@ -202,7 +202,7 @@ export default function ComponentTable({
         ...defaultAdd,
       },
     ]);
-  }, [rows, defaultAdd]);
+  }, [defaultAdd]);
 
   function compareChanges(list: any[], editRows: GridEditingState) {
     const transformedList = Object.keys(editRows).map((id) => {

@@ -85,7 +85,11 @@ export function ComponentEvents() {
         data={data}
         columns={columns}
         invisibleColumns={{ id: false }}
-        defaultAdd={{ status: "Ativo" }}
+        defaultAdd={{
+          status: "Ativo",
+          initDate: dayjs("2024-05-02"),
+          endDate: dayjs("2024-05-02"),
+        }}
       />
     </Container>
   );

@@ -65,7 +65,6 @@ export function ComponentTableChangesDialog({
   }
 
   function handleChange(item) {
-    console.log(editedItems);
     if (expanded.includes(item)) {
       setExpanded((prev) => prev.filter((val) => val !== item));
     } else {
