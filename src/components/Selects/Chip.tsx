@@ -11,14 +11,17 @@ export function ComponentChipSelect({
   width = "300px",
   getOptionLabel,
   onChange,
+  isMultiple = true,
+  clearable = true,
 }: ChipSelectProps) {
   const { t } = useStatus();
 
   return (
     <Box sx={{ width }}>
       <Autocomplete
-        multiple
+        multiple={isMultiple}
         limitTags={limitTags}
+        disableClearable={!clearable}
         id={id}
         options={options as { label?: string }[]}
         defaultValue={defaultValue as { label?: string }[]}

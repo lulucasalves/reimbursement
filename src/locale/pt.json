@@ -87,5 +87,7 @@
   "removed_items": "Removidos",
   "required_column": "Esta coluna não pode estar vazia",
   "unique_column": "Não pode existir valores duplicados para esta coluna",
-  "null": "Vazio"
+  "null": "Vazio",
+  "add_event": "Cadastrar um evento",
+  "not_searched_event": "Nenhum evento foi encontrado! Cadastre um evento para visualizar seus reembolsos."
 }

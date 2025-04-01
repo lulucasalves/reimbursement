@@ -25,10 +25,11 @@ import { ComponentTableChangesDialog } from "./changesDialog";
 
 export default function ComponentTable({
   data,
-  options,
+  options = {},
   columns: columnsBrute,
   invisibleColumns = {},
   defaultAdd = {},
+  actions = true,
 }) {
   const personalizedStyle = {
     border: 0,
@@ -394,65 +395,67 @@ export default function ComponentTable({
         editedItems={changes}
         columns={columns}
       />
-      <GroupButtonsSave>
-        <ButtonGroup>
-          <Button
-            onClick={() => addItem()}
-            variant="outlined"
-            loadingPosition="start"
-            color="inherit"
-            loading={false}
-            startIcon={<BiPlus />}
-            sx={{
-              fontSize: "0.8rem",
-            }}
-          >
-            {t("add_item")}
-          </Button>
-          {selectedRows.length === 1 && (
+      {actions && (
+        <GroupButtonsSave>
+          <ButtonGroup>
             <Button
-              onClick={() => duplicateItems(selectedRows[0])}
+              onClick={() => addItem()}
               variant="outlined"
               loadingPosition="start"
               color="inherit"
               loading={false}
-              startIcon={<BiDuplicate />}
+              startIcon={<BiPlus />}
               sx={{
                 fontSize: "0.8rem",
               }}
             >
-              {t("duplicate_items")}
+              {t("add_item")}
             </Button>
-          )}
-          {selectedRows.length > 0 && (
-            <Button
-              onClick={() => removeItems()}
-              variant="outlined"
-              loadingPosition="start"
-              color="error"
-              loading={false}
-              startIcon={<BiTrash />}
-              sx={{
-                fontSize: "0.8rem",
-              }}
-            >
-              {t("remove_items")}
-            </Button>
-          )}
-        </ButtonGroup>
-        <Button
-          onClick={() => saveChanges()}
-          variant="contained"
-          loadingPosition="start"
-          loading={false}
-          startIcon={<BiSave />}
-          sx={{
-            fontSize: "0.8rem",
-          }}
-        >
-          {t("save_item")}
-        </Button>
-      </GroupButtonsSave>
+            {selectedRows.length === 1 && (
+              <Button
+                onClick={() => duplicateItems(selectedRows[0])}
+                variant="outlined"
+                loadingPosition="start"
+                color="inherit"
+                loading={false}
+                startIcon={<BiDuplicate />}
+                sx={{
+                  fontSize: "0.8rem",
+                }}
+              >
+                {t("duplicate_items")}
+              </Button>
+            )}
+            {selectedRows.length > 0 && (
+              <Button
+                onClick={() => removeItems()}
+                variant="outlined"
+                loadingPosition="start"
+                color="error"
+                loading={false}
+                startIcon={<BiTrash />}
+                sx={{
+                  fontSize: "0.8rem",
+                }}
+              >
+                {t("remove_items")}
+              </Button>
+            )}
+          </ButtonGroup>
+          <Button
+            onClick={() => saveChanges()}
+            variant="contained"
+            loadingPosition="start"
+            loading={false}
+            startIcon={<BiSave />}
+            sx={{
+              fontSize: "0.8rem",
+            }}
+          >
+            {t("save_item")}
+          </Button>
+        </GroupButtonsSave>
+      )}
       {alertComponent.show && (
         <Alert
           sx={{ marginBottom: 2 }}

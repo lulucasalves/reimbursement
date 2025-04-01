@@ -11,3 +11,17 @@ export const Container = styled.div`
     font-weight: 500;
   }
 `;
+
+export const NoEventContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  h3 {
+    font-size: 1.3rem;
+    font-weight: 500;
+  }
+`

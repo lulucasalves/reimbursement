@@ -1,31 +1,19 @@
 import { useStatus } from "~/src/contexts/state";
-import { Container } from "./styles";
+import { Container, NoEventContainer } from "./styles";
 import ComponentTable from "../Table";
+import { Button } from "@mui/material";
+import { ComponentChipSelect } from "../Selects/Chip";
+import { useRouter } from "next/navigation";
 
 export function ComponentRefunds() {
   const { t } = useStatus();
-  const options = {
-    status: [
-      { id: "Ativo", text: "Ativo" },
-      { id: "Inativo", text: "Inativo" },
-    ],
-    currency: [
-      { id: "R$", text: "R$" },
-      { id: "$", text: "$" },
-    ],
-    monthFormat: [
-      { id: "DD/MM/YYYY", text: "DD/MM/YYYY" },
-      { id: "MM/DD/YYYY", text: "MM/DD/YYYY" },
-    ],
-  };
 
   const data = [
     {
       id: "4435345fdfsd",
-      company: "Empresa 1",
-      status: "Ativo",
-      currency: "R$",
-      monthFormat: "DD/MM/YYYY",
+      employee: "Rogério Ceni",
+      status: "Aprovado",
+      value: "R$ 593,42"
     },
   ];
 
@@ -40,56 +28,87 @@ export function ComponentRefunds() {
       editable: false,
     },
     {
-      field: "company",
-      headerName: t("company"),
+      field: "employee",
+      headerName: t("employee"),
       flex: 1,
       minWidth: 150,
       align: "left",
       headerAlign: "left",
-      editable: true,
+      editable: false,
     },
     {
       field: "status",
       headerName: t("status"),
       flex: 1,
-      align: "left",
       minWidth: 150,
+      align: "left",
       headerAlign: "left",
-      editable: true,
-      renderEditCell: "select",
+      editable: false,
     },
     {
-      field: "currency",
-      headerName: t("currency"),
+      field: "value",
+      headerName: t("value"),
       flex: 1,
-      align: "left",
       minWidth: 150,
-      headerAlign: "left",
-      editable: true,
-      renderEditCell: "select",
-    },
-    {
-      field: "monthFormat",
-      headerName: t("month_format"),
-      flex: 1,
       align: "left",
-      minWidth: 150,
       headerAlign: "left",
-      editable: true,
-      renderEditCell: "select",
+      editable: false,
     },
   ];
+
+  const events = [
+    {
+      value: 1,
+      label: "Evento 1",
+    },
+    {
+      value: 2,
+      label: "Evento 2",
+    },
+  ];
+
+  const router = useRouter();
+
+  function goToEvent() {
+    router.push("events");
+  }
 
   return (
     <Container>
       <h2 className="title">{t("refunds")}</h2>
-      <ComponentTable
-        options={options}
-        data={data}
-        columns={columns}
-        invisibleColumns={{ id: false }}
-        defaultAdd={{ status: "Ativo" }}
-      />
+      {events.length ? (
+        <>
+          <ComponentChipSelect
+            id="events"
+            options={events}
+            label="events"
+            isMultiple={false}
+            clearable={false}
+          />
+          <ComponentTable
+            data={data}
+            columns={columns}
+            invisibleColumns={{ id: false }}
+            actions={false}
+          />
+        </>
+      ) : (
+        <NoEventContainer>
+          <h3>{t("not_searched_event")}</h3>
+          <Button
+            onClick={() => goToEvent()}
+            variant="outlined"
+            loadingPosition="start"
+            color="inherit"
+            loading={false}
+            sx={{
+              fontSize: "0.9rem",
+            }}
+          >
+            {t("add_event")}
+          </Button>
+        </NoEventContainer>
+      )}
     </Container>
   );
 }
