@@ -13,7 +13,7 @@ export function ComponentRefunds() {
       id: "4435345fdfsd",
       employee: "Rogério Ceni",
       status: "Aprovado",
-      value: "R$ 593,42"
+      total: "R$ 593,42"
     },
   ];
 
@@ -46,8 +46,8 @@ export function ComponentRefunds() {
       editable: false,
     },
     {
-      field: "value",
-      headerName: t("value"),
+      field: "total",
+      headerName: t("total"),
       flex: 1,
       minWidth: 150,
       align: "left",

@@ -89,5 +89,6 @@
   "unique_column": "Não pode existir valores duplicados para esta coluna",
   "null": "Vazio",
   "add_event": "Cadastrar um evento",
-  "not_searched_event": "Nenhum evento foi encontrado! Cadastre um evento para visualizar seus reembolsos."
+  "not_searched_event": "Nenhum evento foi encontrado! Cadastre um evento para visualizar seus reembolsos.",
+  "total": "Total"
 }
