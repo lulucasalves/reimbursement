@@ -7,8 +7,9 @@ export function ComponentChipSelect({
   options,
   label,
   limitTags = 2,
-  defaultValue = [],
+  value = [],
   width = "300px",
+  height = "",
   getOptionLabel,
   onChange,
   isMultiple = true,
@@ -24,7 +25,7 @@ export function ComponentChipSelect({
         disableClearable={!clearable}
         id={id}
         options={options as { label?: string }[]}
-        defaultValue={defaultValue as { label?: string }[]}
+        value={value as { label?: string }[]}
         onChange={onChange}
         getOptionLabel={
           getOptionLabel ||
@@ -32,7 +33,20 @@ export function ComponentChipSelect({
         }
         size="small"
         renderInput={(params) => (
-          <TextField {...params} label={t(label) || label} />
+          <TextField
+            {...params}
+            label={t(label) || label}
+            sx={
+              height
+                ? {
+                    minHeight: height,
+                    "& .MuiInputBase-root": {
+                      minHeight: height,
+                    },
+                  }
+                : null
+            }
+          />
         )}
       />
     </Box>

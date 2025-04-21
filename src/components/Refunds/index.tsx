@@ -1,19 +1,57 @@
 import { useStatus } from "~/src/contexts/state";
 import { Container, NoEventContainer } from "./styles";
 import ComponentTable from "../Table";
-import { Button } from "@mui/material";
+import { Box, Button, Divider, Modal } from "@mui/material";
 import { ComponentChipSelect } from "../Selects/Chip";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { RiCloseLine } from "react-icons/ri";
 
 export function ComponentRefunds() {
   const { t } = useStatus();
+  const [selectedEvent, setSelectedEvent] = useState<any>();
+  const [manageUsersDialog, setManageUsersDialog] = useState<boolean>(false);
+  const [selectedEmployees, setSelectedEmployees] = useState([]);
+  const [selectedGroups, setSelectedGroups] = useState([]);
+  const [events] = useState([
+    {
+      value: 1,
+      label: "Evento 1",
+    },
+    {
+      value: 2,
+      label: "Evento 2",
+    },
+  ]);
+  const [employees] = useState([
+    {
+      value: 1,
+      label: "reginaldo.valter@outlook.com",
+    },
+    {
+      value: 2,
+      label: "regina.caze@gmail.com",
+    },
+  ]);
+  const [groups] = useState([
+    {
+      value: 1,
+      label: "Recursos Humanos",
+    },
+    {
+      value: 2,
+      label: "Desenvolvedores",
+    },
+  ]);
 
   const data = [
     {
       id: "4435345fdfsd",
       employee: "Rogério Ceni",
       status: "Aprovado",
-      total: "R$ 593,42"
+      total: "R$ 593,42",
+      lastUpdate: "21/04/2025 - 18:56",
+      [t("visualize")]: null,
     },
   ];
 
@@ -54,16 +92,28 @@ export function ComponentRefunds() {
       headerAlign: "left",
       editable: false,
     },
-  ];
-
-  const events = [
     {
-      value: 1,
-      label: "Evento 1",
+      field: "lastUpdate",
+      headerName: t("last_update"),
+      flex: 1,
+      minWidth: 150,
+      align: "left",
+      headerAlign: "left",
+      editable: false,
     },
     {
-      value: 2,
-      label: "Evento 2",
+      field: t("visualize"),
+      headerName: t("actions"),
+      flex: 1,
+      minWidth: 150,
+      align: "left",
+      headerAlign: "left",
+      editable: true,
+      renderEditCell: "button",
+      sortable: false,
+      filterable: false,
+      action: visualizeItem,
+      warnText: t("save_new_row_to_edit_groups"),
     },
   ];
 
@@ -73,24 +123,161 @@ export function ComponentRefunds() {
     router.push("events");
   }
 
+  function visualizeItem(val) {
+    router.push(`refund/${val.id}`);
+  }
+
+  function handleChangeEvent(_, val) {
+    setSelectedEvent(val.label);
+    localStorage.setItem("filterRefundEvent", val.label);
+  }
+
+  useEffect(() => {
+    const refundEvent = localStorage.getItem("filterRefundEvent");
+
+    if (refundEvent) {
+      if (events.find((val) => val.label === refundEvent)) {
+        setSelectedEvent(refundEvent);
+      }
+    }
+  }, []);
+
+  const Table = () => {
+    return !selectedEvent ? (
+      <NoEventContainer>
+        <h3>{t("refund_select_event_filter")}</h3>
+      </NoEventContainer>
+    ) : (
+      <ComponentTable
+        data={data}
+        columns={columns}
+        invisibleColumns={{ id: false }}
+        actions={false}
+      />
+    );
+  };
+
+  function onClose() {
+    setManageUsersDialog(false);
+  }
+
+  function handleSelectEmployees(_, val) {
+    console.log(val);
+    setSelectedEmployees(val);
+  }
+
+  function handleSelectGroups(_, val) {
+    setSelectedGroups(val);
+  }
+
   return (
     <Container>
+      <Modal
+        open={manageUsersDialog}
+        onClose={onClose}
+        aria-labelledby="employee-modal"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          sx={{
+            bgcolor: "var(--background-light)",
+            borderRadius: 2,
+            width: "100%",
+            minWidth: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            margin: "1rem",
+            overflow: "auto",
+          }}
+        >
+          <div className="title-close">
+            <h2 className="title">
+              {t("manage_users")} - {selectedEvent}
+            </h2>
+            <div className="icons-group">
+              <button onClick={onClose}>
+                <RiCloseLine fontSize={25} />
+              </button>
+            </div>
+          </div>
+
+          <Divider />
+
+          <div className="content-refund">
+            <ComponentChipSelect
+              id="employees-refund"
+              width="100%"
+              options={employees}
+              label="employees"
+              limitTags={20}
+              height="150px"
+              onChange={handleSelectEmployees}
+              value={selectedEmployees}
+            />
+            <ComponentChipSelect
+              id="groups-refund"
+              width="100%"
+              options={groups}
+              label="groups"
+              limitTags={20}
+              height="150px"
+              onChange={handleSelectGroups}
+              value={selectedGroups}
+            />
+            <div className="group-buttons-refund">
+              <Button
+                variant="outlined"
+                onClick={onClose}
+                loadingPosition="start"
+                color="primary"
+                loading={false}
+              >
+                {t("return")}
+              </Button>
+              <Button
+                variant="contained"
+                loadingPosition="start"
+                color="primary"
+                loading={false}
+              >
+                {t("save_item")}
+              </Button>
+            </div>
+          </div>
+        </Box>
+      </Modal>
       <h2 className="title">{t("refunds")}</h2>
       {events.length ? (
         <>
-          <ComponentChipSelect
-            id="events"
-            options={events}
-            label="events"
-            isMultiple={false}
-            clearable={false}
-          />
-          <ComponentTable
-            data={data}
-            columns={columns}
-            invisibleColumns={{ id: false }}
-            actions={false}
-          />
+          <div className="filter-container">
+            <ComponentChipSelect
+              id="event"
+              options={events}
+              label="event"
+              isMultiple={false}
+              clearable={false}
+              onChange={handleChangeEvent}
+              value={selectedEvent}
+            />
+            <Button
+              onClick={() => setManageUsersDialog(true)}
+              variant="contained"
+              loadingPosition="start"
+              color="primary"
+              loading={false}
+              sx={{
+                fontSize: "0.8rem",
+              }}
+            >
+              {t("manage_users")}
+            </Button>
+          </div>
+          <Table />
         </>
       ) : (
         <NoEventContainer>

@@ -2,6 +2,7 @@
 
 import { Roboto } from "next/font/google";
 import "./globals.css";
+import "~/src/components/styles.scss";
 import { StatusProvider } from "~/src/contexts/state";
 import { useEffect, useState } from "react";
 import { AuthProvider } from "~/src/contexts/auth";

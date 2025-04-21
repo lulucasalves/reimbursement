@@ -25,10 +25,11 @@ import { PiMoneyWavyBold, PiMoneyWavyFill } from "react-icons/pi";
 import { FaRegBuilding, FaBuilding } from "react-icons/fa";
 
 export function ComponentLayoutSideMenu({ menuMobile }: InterfaceSideMenu) {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState<boolean | undefined>(undefined);
   const pathname = usePathname();
   const router = useRouter();
   const { t } = useStatus();
+  const { setMenuMobile } = useStatus();
 
   const menuItems = [
     {
@@ -73,19 +74,32 @@ export function ComponentLayoutSideMenu({ menuMobile }: InterfaceSideMenu) {
 
     if (searchLocalStorage === "1" || searchLocalStorage === "0") {
       setExpanded(searchLocalStorage === "1");
+    } else {
+      setExpanded(true);
     }
   }, []);
 
+  if (expanded === undefined) {
+    return null;
+  }
+
+  const containerMenuSideType = () => {
+    if (!menuMobile && window.innerWidth < 768) return "hide";
+    else if (expanded) return "expanded";
+
+    return "";
+  };
+
+  function goTo(path: string) {
+    router.push(path);
+
+    if (window.innerWidth < 768) {
+      setMenuMobile(false);
+    }
+  }
+
   return (
-    <ContainerSideMenu
-      type={
-        !menuMobile && window.innerWidth < 768
-          ? "hide"
-          : expanded
-          ? "expanded"
-          : ""
-      }
-    >
+    <ContainerSideMenu type={containerMenuSideType()}>
       <IconButton
         className="iconExpanded"
         onClick={changeStateExpanded}
@@ -103,7 +117,7 @@ export function ComponentLayoutSideMenu({ menuMobile }: InterfaceSideMenu) {
           <ListItem key={text} disablePadding>
             <ListItemButton
               selected={pathname.includes(path)}
-              onClick={() => router.push(path)}
+              onClick={() => goTo(path)}
             >
               <ListItemIcon>
                 {pathname.includes(path) ? iconFill : icon}

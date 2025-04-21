@@ -100,7 +100,7 @@ export function ComponentAuthEmail() {
       if (verifyCode.status === 200) {
         setError("");
         const token = verifyCode.message;
-        localStorage.setItem('token', token);
+        localStorage.setItem("token", token);
         router.push("dashboard");
       } else {
         setError(verifyCode.message);

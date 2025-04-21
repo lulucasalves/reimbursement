@@ -1,6 +1,7 @@
 {
   "site_name": "Reembolsos",
   "head_title_auth": "Autenticação",
+  "head_title_dashboard": "Dashboard",
   "head_title_events": "Eventos",
   "head_title_companys": "Empresas",
   "head_title_employees": "Funcionários",
@@ -90,5 +91,10 @@
   "null": "Vazio",
   "add_event": "Cadastrar um evento",
   "not_searched_event": "Nenhum evento foi encontrado! Cadastre um evento para visualizar seus reembolsos.",
-  "total": "Total"
+  "total": "Total",
+  "refund_select_event_filter": "Por favor, selecione um evento para visualizar os reembolsos disponíveis.",
+  "last_update": "Última atualização",
+  "manage_users": "Gerenciar usuários",
+  "visualize": "Visualizar",
+  "actions": "Ações"
 }

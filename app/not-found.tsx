@@ -15,5 +15,5 @@ export default function NotFoundPage() {
       router.push(`/${currentLanguage}/dashboard`);
     } else router.push(`/${currentLanguage}/auth`);
   }, [currentLanguage, router, validateToken]);
-  return <p>hi</p>;
+  return <p>Not found</p>;
 }

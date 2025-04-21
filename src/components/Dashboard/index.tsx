@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CardItem,
   CardsContainer,
@@ -19,6 +19,9 @@ import Paper from "@mui/material/Paper";
 import Tooltip from "@mui/material/Tooltip";
 
 export function ComponentDashboard() {
+  const [selectedMonths, setSelectedMonths] = useState([]);
+  const [selectedEvents, setSelectedEvents] = useState([]);
+
   const [months] = useState([
     { value: 1, label: "Janeiro/2025" },
     { value: 2, label: "Fevereiro/2025" },
@@ -73,6 +76,39 @@ export function ComponentDashboard() {
     },
   ];
 
+  function handleChangeMonth(_, val) {
+    setSelectedMonths(val);
+    localStorage.setItem("filterDashboardMonths", JSON.stringify(val));
+  }
+
+  function handleChangeEvent(_, val) {
+    setSelectedEvents(val);
+    localStorage.setItem("filterDashboardEvents", JSON.stringify(val));
+  }
+
+  useEffect(() => {
+    const dashboardMonths = localStorage.getItem("filterDashboardMonths");
+    const dashboardEvents = localStorage.getItem("filterDashboardEvents");
+
+    if (dashboardMonths) {
+      const parsed = JSON.parse(dashboardMonths);
+      const validValues = months.map((m) => m.value);
+      const isValid = parsed.every((val) => validValues.includes(val.value));
+      if (isValid) {
+        setSelectedMonths(parsed);
+      }
+    }
+
+    if (dashboardEvents) {
+      const parsed = JSON.parse(dashboardEvents);
+      const validValues = events.map((e) => e.value);
+      const isValid = parsed.every((val) => validValues.includes(val.value));
+      if (isValid) {
+        setSelectedEvents(parsed);
+      }
+    }
+  }, []);
+
   return (
     <Container>
       <h2 className="title">{t("dashboard")}</h2>
@@ -83,6 +119,8 @@ export function ComponentDashboard() {
           options={months}
           label="monthYear"
           limitTags={2}
+          onChange={handleChangeMonth}
+          value={selectedMonths}
         />
         <ComponentChipSelect
           id="events"
@@ -90,6 +128,8 @@ export function ComponentDashboard() {
           options={events}
           label="events"
           limitTags={2}
+          onChange={handleChangeEvent}
+          value={selectedEvents}
         />
       </SelectGroup>
       <CardsContainer>

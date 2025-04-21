@@ -32,6 +32,7 @@ export default function ComponentTable({
   actions = true,
 }) {
   const personalizedStyle = {
+    minHeight: "150px",
     border: 0,
     "& .css-1b619uk-MuiInputBase-root-MuiInput-root-MuiSelect-root, .css-1qwk5lv-MuiInputBase-root-MuiInput-root-MuiSelect-root":
       {
@@ -466,7 +467,11 @@ export default function ComponentTable({
         </Alert>
       )}
       <Paper
-        sx={{ height: "calc(100vh - 240px)", width: "100%", overflowX: "auto" }}
+        sx={{
+          height: "calc(100vh - 240px)",
+          width: "100%",
+          overflowX: "auto",
+        }}
       >
         <DataGrid
           apiRef={apiRef}

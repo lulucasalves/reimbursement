@@ -91,5 +91,10 @@
   "null": "Null",
   "add_event": "Register an event",
   "not_searched_event": "No event was found! Register an event to view your reimbursements.",
-  "total": "Total"
+  "total": "Total",
+  "refund_select_event_filter": "Please select an event to view the available refunds.",
+  "last_update": "Last update",
+  "manage_users": "Manage users",
+  "visualize": "Visualize",
+  "actions": "Ações"
 }

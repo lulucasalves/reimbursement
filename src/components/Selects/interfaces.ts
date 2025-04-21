@@ -3,8 +3,9 @@ export interface ChipSelectProps {
   options: unknown[];
   label: string;
   limitTags?: number;
-  defaultValue?: unknown[];
+  value?: unknown[];
   width?: string | number;
+  height?: string | number;
   isMultiple?: boolean;
   clearable?: boolean;
   getOptionLabel?: (option: unknown) => string;
