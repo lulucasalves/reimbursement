@@ -6,6 +6,7 @@
   "head_title_companys": "Empresas",
   "head_title_employees": "Funcionários",
   "head_title_refunds": "Reembolsos",
+  "head_title_refund": "Reembolso",
   "head_description_auth": "Sessão de Autenticação",
   "head_content_auth": "Sessão de Autenticação",
   "language": "Idioma",
@@ -96,5 +97,8 @@
   "last_update": "Última atualização",
   "manage_users": "Gerenciar usuários",
   "visualize": "Visualizar",
-  "actions": "Ações"
+  "actions": "Ações",
+  "date": "Data",
+  "link_comprovant": "Link do comprovante",
+  "description": "Descrição"
 }

@@ -37,11 +37,24 @@
   padding: 1rem;
   margin: 1rem 0;
   gap: 1rem;
+  min-height: "20rem";
+
+  @media (max-width: 768px) {
+    min-height: auto;
+  }
+
+  &.fullscreen {
+    min-height: "calc(100vh - 60px)";
+
+    @media (max-width: 768px) {
+      min-height: "calc(100vh - 60px)";
+    }
+  }
 }
 
 .group-buttons-refund {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   width: 100%;
   gap: 1rem;

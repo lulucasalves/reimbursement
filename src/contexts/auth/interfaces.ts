@@ -7,4 +7,9 @@ export interface AuthContextType {
     name: string;
   }[];
   changeCompany: (value: number) => void;
+  moneyPrefix: {
+    thousandSeparator: string;
+    decimalSeparator: string;
+    prefix: string;
+  };
 }

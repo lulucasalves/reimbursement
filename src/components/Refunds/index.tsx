@@ -6,6 +6,7 @@ import { ComponentChipSelect } from "../Selects/Chip";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { RiCloseLine } from "react-icons/ri";
+import { BiExitFullscreen, BiFullscreen } from "react-icons/bi";
 
 export function ComponentRefunds() {
   const { t } = useStatus();
@@ -13,6 +14,7 @@ export function ComponentRefunds() {
   const [manageUsersDialog, setManageUsersDialog] = useState<boolean>(false);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [selectedGroups, setSelectedGroups] = useState([]);
+  const [fullscreen, setFullscreen] = useState(false);
   const [events] = useState([
     {
       value: 1,
@@ -43,6 +45,8 @@ export function ComponentRefunds() {
       label: "Desenvolvedores",
     },
   ]);
+
+  const isMobile = window.innerWidth < 768;
 
   const data = [
     {
@@ -170,6 +174,10 @@ export function ComponentRefunds() {
     setSelectedGroups(val);
   }
 
+  function handleFullScreen() {
+    setFullscreen(!fullscreen);
+  }
+
   return (
     <Container>
       <Modal
@@ -187,11 +195,12 @@ export function ComponentRefunds() {
             bgcolor: "var(--background-light)",
             borderRadius: 2,
             width: "100%",
-            minWidth: "100%",
-            height: "100%",
+            maxWidth: fullscreen || isMobile ? "100%" : "50rem",
+            minHeight: fullscreen ? "100%" : "20rem",
+            maxHeight: fullscreen ? "100%" : "90vh",
             display: "flex",
             flexDirection: "column",
-            margin: "1rem",
+            margin: fullscreen ? "0" : "1rem",
             overflow: "auto",
           }}
         >
@@ -200,6 +209,15 @@ export function ComponentRefunds() {
               {t("manage_users")} - {selectedEvent}
             </h2>
             <div className="icons-group">
+              {!isMobile && (
+                <button onClick={handleFullScreen}>
+                  {fullscreen ? (
+                    <BiExitFullscreen fontSize={20} />
+                  ) : (
+                    <BiFullscreen fontSize={20} />
+                  )}
+                </button>
+              )}
               <button onClick={onClose}>
                 <RiCloseLine fontSize={25} />
               </button>
@@ -208,7 +226,7 @@ export function ComponentRefunds() {
 
           <Divider />
 
-          <div className="content-refund">
+          <div className={`content-refund  ${fullscreen ? "fullscreen" : ""}`}>
             <ComponentChipSelect
               id="employees-refund"
               width="100%"

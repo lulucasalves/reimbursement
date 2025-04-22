@@ -20,6 +20,11 @@ export const AuthProvider = ({ children }: InterfaceProvider) => {
     { id: 1, name: "Empresa 1" },
     { id: 2, name: "Empresa 2" },
   ]);
+  const [moneyPrefix, setMoneyPrefix] = useState({
+    thousandSeparator: ".",
+    decimalSeparator: ",",
+    prefix: "R$ ",
+  });
   const router = useRouter();
 
   const validateToken = useCallback(() => {
@@ -57,6 +62,7 @@ export const AuthProvider = ({ children }: InterfaceProvider) => {
         company,
         companies,
         changeCompany,
+        moneyPrefix,
       }}
     >
       {children}

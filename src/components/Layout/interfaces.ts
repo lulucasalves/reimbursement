@@ -10,4 +10,5 @@ export interface InterfaceSideMenu {
 
 export interface InterfaceLayoutContainer {
   children: ReactNode;
+  showMenuSide?: boolean;
 }

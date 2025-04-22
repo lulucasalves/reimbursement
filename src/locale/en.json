@@ -5,6 +5,7 @@
   "head_title_events": "Events",
   "head_title_employees": "Employees",
   "head_title_refunds": "Refunds",
+  "head_title_refund": "Refund",
   "head_title_companys": "Companys",
   "head_description_auth": "Authentication Session",
   "head_content_auth": "Authentication Session",
@@ -96,5 +97,8 @@
   "last_update": "Last update",
   "manage_users": "Manage users",
   "visualize": "Visualize",
-  "actions": "Ações"
+  "actions": "Actions",
+  "date": "Date",
+  "link_comprovant": "Comprovant link",
+  "description": "Description"
 }

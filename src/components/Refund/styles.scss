@@ -1,0 +1,58 @@
+.refund {
+  padding: 0 1rem;
+
+  @media (max-width: 768px) {
+    padding: 0;
+  }
+
+  .actions-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .title-container {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+
+      h3 {
+        font-size: 2rem;
+        font-weight: 500;
+      }
+    }
+
+    .buttons-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+  }
+
+  .refund-details {
+    margin: 2rem 0;
+    gap: 2rem;
+    display: flex;
+    align-items: center;
+
+    p {
+      font-size: 1.3rem;
+      font-weight: 500;
+      white-space: nowrap;
+
+      span {
+        font-weight: 400;
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+  }
+}

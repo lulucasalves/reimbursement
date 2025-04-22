@@ -15,6 +15,7 @@ import {
   Chip,
   MenuItem,
   Select,
+  TextField,
 } from "@mui/material";
 import { useStatus } from "~/src/contexts/state";
 import { ButtonGroup, Container, GroupButtonsSave } from "./styles";
@@ -22,6 +23,8 @@ import { BiDuplicate, BiPlus, BiSave, BiTrash } from "react-icons/bi";
 import { DatePicker } from "@mui/x-date-pickers";
 import { generateHash } from "../../utils";
 import { ComponentTableChangesDialog } from "./changesDialog";
+import { NumericFormat } from "react-number-format";
+import { useAuth } from "~/src/contexts/auth";
 
 export default function ComponentTable({
   data,
@@ -55,6 +58,7 @@ export default function ComponentTable({
     date: DateEditCell,
     chip: ChipCell,
     button: ButtonCell,
+    money: MoneyCell,
   };
 
   const columns = columnsBrute.map((val) => ({
@@ -63,6 +67,7 @@ export default function ComponentTable({
   }));
 
   const { t } = useStatus();
+  const { moneyPrefix } = useAuth();
   const apiRef = useGridApiRef();
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [alertComponent, setAlertComponent] = useState({
@@ -90,6 +95,47 @@ export default function ComponentTable({
       setLoadedData(true);
     }
   }, [data, loadedData]);
+
+  function MoneyCell(props: GridRenderEditCellParams) {
+    const { id, field, value } = props;
+
+    const handleValueChange = (values: any) => {
+      const { floatValue } = values;
+      if (floatValue !== undefined) {
+        apiRef.current.setEditCellValue({ id, field, value: floatValue });
+      }
+    };
+
+    return (
+      <NumericFormat
+        value={value}
+        onValueChange={handleValueChange}
+        thousandSeparator={moneyPrefix.thousandSeparator}
+        decimalSeparator={moneyPrefix.decimalSeparator}
+        prefix={moneyPrefix.prefix}
+        decimalScale={2}
+        customInput={TextField}
+        fullWidth
+        sx={{
+          height: "100%",
+          padding: 0,
+          "& .MuiInputBase-root": {
+            height: "100%",
+            padding: 0,
+            alignItems: "center",
+          },
+          "& .MuiOutlinedInput-notchedOutline": {
+            border: "none",
+            padding: 0,
+            borderRadius: 0,
+          },
+          "& .MuiInputBase-input": {
+            fontSize: "14px",
+          },
+        }}
+      />
+    );
+  }
 
   function StatusEditCell(props: GridRenderEditCellParams) {
     const { id, field, value } = props;

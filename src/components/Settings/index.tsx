@@ -45,7 +45,7 @@ export default function ComponentSettings({
     },
   ];
 
-  function setFullScreen() {
+  function handleFullScreen() {
     setFullscreen(!fullscreen);
   }
 
@@ -78,7 +78,7 @@ export default function ComponentSettings({
           <h2 className="title">{t("settings")}</h2>
           <div className="icons-group">
             {!isMobile && (
-              <button onClick={setFullScreen}>
+              <button onClick={handleFullScreen}>
                 {fullscreen ? (
                   <BiExitFullscreen fontSize={20} />
                 ) : (

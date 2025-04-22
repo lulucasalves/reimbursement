@@ -1,1 +1,2 @@
-@use './Refunds/styles.scss'
+@use "./Refunds/styles.scss" as refundsStyles;
+@use "./Refund/styles.scss" as refundStyles;

@@ -7,6 +7,7 @@ import { Box } from "@mui/material";
 
 export function ComponentLayoutContainer({
   children,
+  showMenuSide=true
 }: InterfaceLayoutContainer) {
   const { menuMobile } = useStatus();
 
@@ -14,7 +15,7 @@ export function ComponentLayoutContainer({
     <Container>
       <ComponentLayoutMenu />
       <Box sx={{ display: "flex" }}>
-        <ComponentLayoutSideMenu menuMobile={menuMobile} />
+       {showMenuSide || menuMobile ? <ComponentLayoutSideMenu menuMobile={menuMobile} />:null}
 
         <Box
           sx={{
