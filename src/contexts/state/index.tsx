@@ -43,6 +43,7 @@ export const StatusProvider = ({ children }: InterfaceProvider) => {
 
     if (language?.length === 2) {
       setCurrentLanguage(language);
+      localStorage.setItem("language", language);
     }
   }, []);
 

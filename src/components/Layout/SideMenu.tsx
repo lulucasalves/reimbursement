@@ -39,12 +39,6 @@ export function ComponentLayoutSideMenu({ menuMobile }: InterfaceSideMenu) {
       path: "dashboard",
     },
     {
-      text: t("events"),
-      icon: <FaRegCalendar fontSize={21} />,
-      iconFill: <FaCalendar fontSize={21} />,
-      path: "events",
-    },
-    {
       text: t("refunds"),
       icon: <PiMoneyWavyBold fontSize={23} />,
       iconFill: <PiMoneyWavyFill fontSize={23} />,
@@ -55,6 +49,12 @@ export function ComponentLayoutSideMenu({ menuMobile }: InterfaceSideMenu) {
       icon: <MdOutlinePeopleOutline fontSize={23} />,
       iconFill: <MdPeople fontSize={23} />,
       path: "employees",
+    },
+    {
+      text: t("events"),
+      icon: <FaRegCalendar fontSize={21} />,
+      iconFill: <FaCalendar fontSize={21} />,
+      path: "events",
     },
     {
       text: t("companys"),

@@ -7,6 +7,7 @@
   "head_title_refunds": "Refunds",
   "head_title_refund": "Refund",
   "head_title_companys": "Companys",
+  "head_title_ambients": "Ambients",
   "head_description_auth": "Authentication Session",
   "head_content_auth": "Authentication Session",
   "language": "Language",
@@ -26,6 +27,7 @@
   "companys": "Companys",
   "company": "Company",
   "settings": "Settings",
+  "ambients": "Ambients",
   "logout": "Logout",
   "dashboard": "Dashboard",
   "employees": "Employees",
@@ -100,5 +102,9 @@
   "actions": "Actions",
   "date": "Date",
   "link_comprovant": "Comprovant link",
-  "description": "Description"
+  "description": "Description",
+  "select_ambient": "What environment do you want to enter?",
+  "enter": "Enter",
+  "created_at": "Created at",
+  "loading": "Loading"
 }

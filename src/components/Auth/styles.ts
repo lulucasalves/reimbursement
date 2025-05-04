@@ -32,6 +32,7 @@ export const ContentSide = styled.div`
   overflow-x: hidden;
 
   .content {
+    width: 100%;
     text-align: center;
     max-width: 30rem;
 

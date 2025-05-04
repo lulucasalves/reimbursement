@@ -1,4 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
+import { NumericFormat } from "react-number-format";
+import { BiDuplicate, BiPlus, BiSave, BiTrash } from "react-icons/bi";
+
 import {
   DataGrid,
   GridRenderEditCellParams,
@@ -17,14 +20,15 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { useStatus } from "~/src/contexts/state";
-import { ButtonGroup, Container, GroupButtonsSave } from "./styles";
-import { BiDuplicate, BiPlus, BiSave, BiTrash } from "react-icons/bi";
 import { DatePicker } from "@mui/x-date-pickers";
-import { generateHash } from "../../utils";
-import { ComponentTableChangesDialog } from "./changesDialog";
-import { NumericFormat } from "react-number-format";
+
+import { useStatus } from "~/src/contexts/state";
 import { useAuth } from "~/src/contexts/auth";
+
+import { ComponentTableChangesDialog } from "./changesDialog";
+import { ButtonGroup, Container, GroupButtonsSave } from "./styles";
+
+import { generateHash } from "../../utils";
 
 export default function ComponentTable({
   data,
@@ -32,7 +36,14 @@ export default function ComponentTable({
   columns: columnsBrute,
   invisibleColumns = {},
   defaultAdd = {},
+  loading = false,
   actions = true,
+  editLoading = false,
+  confirmChanges = async (
+    val: any
+  ): Promise<{ message: string; success: boolean }> => {
+    return { message: val, success: true };
+  },
 }) {
   const personalizedStyle = {
     minHeight: "150px",
@@ -80,9 +91,8 @@ export default function ComponentTable({
     items: [],
   });
   const [sortModel, setSortModel] = useState([]);
-  const [loadedData, setLoadedData] = useState(false);
   const [tableChangesDialog, setTableChangesDialog] = useState(false);
-  const [changes, setChanges] = useState({});
+  const [changes, setChanges] = useState<any>({});
   const [removedRows, setRemovedRows] = useState<string[]>([]);
 
   function closeChangesDialog() {
@@ -90,11 +100,10 @@ export default function ComponentTable({
   }
 
   useEffect(() => {
-    if (!loadedData) {
+    if (!loading) {
       setRows(data);
-      setLoadedData(true);
     }
-  }, [data, loadedData]);
+  }, [loading]);
 
   function MoneyCell(props: GridRenderEditCellParams) {
     const { id, field, value } = props;
@@ -433,6 +442,23 @@ export default function ComponentTable({
     return true;
   }
 
+  async function confirmChangesCallBack() {
+    const result = await confirmChanges({
+      create: changes.newItems,
+      edit: changes.editedItems,
+      delete: changes.removedItems,
+    });
+    closeChangesDialog();
+
+    if (result.message) {
+      setAlertComponent({
+        show: true,
+        message: result.message,
+        severity: "error" as AlertColor,
+      });
+    }
+  }
+
   return (
     <Container>
       <ComponentTableChangesDialog
@@ -441,8 +467,11 @@ export default function ComponentTable({
         currentData={data}
         editedItems={changes}
         columns={columns}
+        options={options}
+        confirmChanges={confirmChangesCallBack}
+        loading={editLoading}
       />
-      {actions && (
+      {actions && !loading && (
         <GroupButtonsSave>
           <ButtonGroup>
             <Button
@@ -543,6 +572,7 @@ export default function ComponentTable({
           getRowClassName={(params) => {
             return String(params.id).includes("new_") ? "new_row" : "";
           }}
+          loading={loading}
         />
       </Paper>
     </Container>

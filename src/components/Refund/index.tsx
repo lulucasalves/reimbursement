@@ -2,7 +2,7 @@ import { useStatus } from "~/src/contexts/state";
 import { FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { AlertColor, Button, Chip, TextField } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import ComponentTable from "../Table";
 import dayjs from "dayjs";
 

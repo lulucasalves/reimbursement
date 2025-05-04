@@ -1,0 +1,44 @@
+.ambient-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  gap: 30px;
+  flex-direction: column;
+  padding: 0 10px;
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .ambient-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    .ambient-item {
+      border-radius: 10px;
+      border: 2px solid var(--gray2);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+
+      .ambient-description {
+        font-size: 14px;
+        opacity: 0.8;
+      }
+    }
+
+    .input-edit {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+
+      .MuiButton-icon {
+        margin: 0;
+      }
+    }
+  }
+}

@@ -1,10 +1,9 @@
-import { Box, Button, Divider, Modal, Typography } from "@mui/material";
-import { ContentContainer, GroupButtons, TitleClose } from "./styles";
 import { BiExitFullscreen, BiFullscreen } from "react-icons/bi";
 import { RiCloseLine } from "react-icons/ri";
-import { useStatus } from "~/src/contexts/state";
 import { useState } from "react";
+import { IoChevronForward } from "react-icons/io5";
 
+import { Box, Button, Divider, Modal, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import MuiAccordion, { AccordionProps } from "@mui/material/Accordion";
 import MuiAccordionSummary, {
@@ -12,7 +11,10 @@ import MuiAccordionSummary, {
   accordionSummaryClasses,
 } from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import { IoChevronForward } from "react-icons/io5";
+
+import { useStatus } from "~/src/contexts/state";
+
+import { ContentContainer, GroupButtons, TitleClose } from "./styles";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -54,6 +56,9 @@ export function ComponentTableChangesDialog({
   columns,
   isOpen,
   onClose,
+  options = {},
+  loading,
+  confirmChanges,
 }) {
   const { t } = useStatus();
   const isMobile = window.innerWidth < 768;
@@ -72,6 +77,17 @@ export function ComponentTableChangesDialog({
     }
   }
 
+  function selectItemValue(val, header) {
+    const headerItem = columns.find((column) => column.headerName === header);
+    const headerItemSelect =
+      headerItem?.renderEditCell?.name === "StatusEditCell";
+
+    if (headerItemSelect) {
+      return options[headerItem.field]?.find((item) => item.id === val).text;
+    }
+    return val;
+  }
+
   function newItemsText() {
     const columnSearched = columns
       .filter((val) => val.field !== "id" && val.editable)
@@ -83,12 +99,14 @@ export function ComponentTableChangesDialog({
       infosText = [
         ...infosText,
         columnSearched
-          .map(
-            (val) =>
-              `${columns.find((val2) => val === val2.field).headerName}: ${
-                item[val] || t("null")
-              }`
-          )
+          .map((val) => {
+            const headerName = columns.find(
+              (val2) => val === val2.field
+            ).headerName;
+            return `${headerName}: ${
+              selectItemValue(item[val], headerName) || t("null")
+            }`;
+          })
           .join(" | "),
       ];
     }
@@ -115,13 +133,17 @@ export function ComponentTableChangesDialog({
 
             if (columnEdited) {
               return `${columnHeader}: ${
-                currentData.find((val2) => val2.id === item.id)[val] ||
-                t("null")
-              } > ${item[val] || t("null")}`;
+                selectItemValue(
+                  currentData.find((val2) => val2.id === item.id)[val],
+                  columnHeader
+                ) || t("null")
+              } > ${selectItemValue(item[val], columnHeader) || t("null")}`;
             } else {
               return `${columnHeader}: ${
-                currentData.find((val2) => val2.id === item.id)[val] ||
-                t("null")
+                selectItemValue(
+                  currentData.find((val2) => val2.id === item.id)[val],
+                  columnHeader
+                ) || t("null")
               }`;
             }
           })
@@ -149,7 +171,10 @@ export function ComponentTableChangesDialog({
             ).headerName;
 
             return `${columnHeader}: ${
-              currentData.find((val2) => val2.id === id)[val] || t("null")
+              selectItemValue(
+                currentData.find((val2) => val2.id === id)[val],
+                columnHeader
+              ) || t("null")
             }`;
           })
           .join(" | "),
@@ -159,10 +184,16 @@ export function ComponentTableChangesDialog({
     return `${infosText.join("\n\n")}`;
   }
 
+  function handleClose() {
+    if (!loading) {
+      onClose();
+    }
+  }
+
   return (
     <Modal
       open={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       aria-labelledby="settings-modal"
       sx={{
         display: "flex",
@@ -196,7 +227,7 @@ export function ComponentTableChangesDialog({
                 )}
               </button>
             )}
-            <button onClick={onClose}>
+            <button onClick={handleClose}>
               <RiCloseLine fontSize={25} />
             </button>
           </div>
@@ -271,7 +302,7 @@ export function ComponentTableChangesDialog({
             <GroupButtons>
               <Button
                 variant="outlined"
-                onClick={onClose}
+                onClick={handleClose}
                 loadingPosition="start"
                 color="primary"
                 loading={false}
@@ -281,8 +312,9 @@ export function ComponentTableChangesDialog({
               <Button
                 variant="contained"
                 loadingPosition="start"
+                onClick={confirmChanges}
                 color="primary"
-                loading={false}
+                loading={loading}
               >
                 {t("confirm")}
               </Button>

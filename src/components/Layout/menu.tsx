@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 import { ComponentHamburgerMenu } from "./HamburgerMenu";
 import dynamic from "next/dynamic";
 import { AiOutlineSetting } from "react-icons/ai";
-import { TbDoorEnter } from "react-icons/tb";
+import { TbArrowsExchange, TbDoorEnter } from "react-icons/tb";
 
 const SettingsModal = dynamic(() => import("../Settings"), {
   loading: () => null,
@@ -25,8 +25,8 @@ const SettingsModal = dynamic(() => import("../Settings"), {
 });
 
 export function ComponentLayoutMenu() {
-  const { company, companies, changeCompany } = useAuth();
-  const { t } = useStatus();
+  const { company, companies, changeCompany, userData } = useAuth();
+  const { t, currentLanguage } = useStatus();
   const router = useRouter();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -34,7 +34,8 @@ export function ComponentLayoutMenu() {
   const [openSettings, setOpenSettings] = useState(false);
 
   function changeCompanyToggle(e: SelectChangeEvent) {
-    changeCompany(parseInt(e.target.value));
+    changeCompany(e.target.value);
+    location.reload();
   }
 
   function handleOpenMenu(event: MouseEvent<HTMLElement>) {
@@ -47,6 +48,10 @@ export function ComponentLayoutMenu() {
 
   function goToConfigPage() {
     setOpenSettings(true);
+  }
+
+  function goToAmbients() {
+    router.push(`/${currentLanguage}/ambients`);
   }
 
   function handleCloseSettings() {
@@ -71,13 +76,20 @@ export function ComponentLayoutMenu() {
           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
             <Select
               labelId="demo-select-small-label"
-              id="demo-select-small-label"
-              value={String(company)}
+              id="demo-select-small"
+              value={companies.length ? String(company) : ""}
               onChange={changeCompanyToggle}
+              displayEmpty
               sx={{ fontSize: "1rem" }}
+              disabled={!companies.length}
             >
-              {companies.map(({ id, name }) => (
-                <MenuItem key={id} value={id}>
+              {!companies.length && (
+                <MenuItem value="" disabled>
+                  {t("loading")}...
+                </MenuItem>
+              )}
+              {companies.map(({ companyId, name }) => (
+                <MenuItem key={companyId} value={companyId}>
                   {name}
                 </MenuItem>
               ))}
@@ -86,17 +98,6 @@ export function ComponentLayoutMenu() {
         </div>
       </div>
       <div className="group-items">
-        {/* <div className="group-icons">
-          <div className="item3">
-            <IconButton size="large">
-              {!notificationsNum ? (
-                <MdNotificationsNone fontSize={24} />
-              ) : (
-                <MdNotifications fontSize={24} />
-              )}
-            </IconButton>
-          </div>
-        </div> */}
         <IconButton onClick={handleOpenMenu}>
           <ContainerImage>
             <Image
@@ -114,6 +115,12 @@ export function ComponentLayoutMenu() {
             <AiOutlineSetting fontSize={20} />
             {t("settings")}
           </MenuItem>
+          {userData?.ambients?.length > 1 && (
+            <MenuItem onClick={goToAmbients} sx={{ gap: "8px" }}>
+              <TbArrowsExchange fontSize={20} />
+              {t("ambients")}
+            </MenuItem>
+          )}
           <Divider />
           <MenuItem onClick={logout} sx={{ gap: "8px", color: "var(--error)" }}>
             <TbDoorEnter fontSize={20} color="var(--error)" />

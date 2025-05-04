@@ -11,16 +11,21 @@ import {
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, CircularProgress, TextField } from "@mui/material";
+import { useAuth } from "~/src/contexts/auth";
+import api from "~/src/services/api";
 
 export function ComponentAuthEmail() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [page, setPage] = useState(1);
   const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
   const [timer, setTimer] = useState(0);
   const [timerRunning, setTimerRunning] = useState(false);
   const [insertCode, setInsertCode] = useState("");
+
+  const { t } = useStatus();
+  const { setAmbient } = useAuth();
+
   const router = useRouter();
 
   useEffect(() => {
@@ -35,14 +40,29 @@ export function ComponentAuthEmail() {
     }
   }, [timer, timerRunning]);
 
-  const { t } = useStatus();
-
   function returnAuth() {
     router.push("auth");
   }
 
   async function sendEmailCode(value: string) {
-    return { status: 200, message: "123456", value };
+    setLoading(true);
+
+    try {
+      const response = await api.post("/auth/generate-email-code", {
+        email: value,
+      });
+
+      nextPage(2);
+      setTimer(response.data.timer);
+      setTimerRunning(true);
+
+      return true;
+    } catch (err: any) {
+      setError(err.response.data.detail || err.message);
+      return false;
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function submitNext(e: FormEvent<HTMLFormElement>) {
@@ -50,31 +70,13 @@ export function ComponentAuthEmail() {
     const form = e.target as HTMLFormElement;
     const email = form.email.value;
 
-    setLoading(true);
-    const { status, message } = await sendEmailCode(email);
+    setEmail(email);
 
-    if (status === 200) {
-      nextPage(2);
-      setEmail(email);
-      setCode(message);
-      setTimer(30);
-      setTimerRunning(true);
-    } else {
-      setError(message);
-    }
-
-    setLoading(false);
+    await sendEmailCode(email);
   }
 
   async function resendCode() {
-    setLoading(true);
-    const { message } = await sendEmailCode(email);
-
-    setEmail(email);
-    setCode(message);
-    setTimer(30);
-    setTimerRunning(true);
-    setLoading(false);
+    await sendEmailCode(email);
   }
 
   function nextPage(value: number) {
@@ -92,22 +94,34 @@ export function ComponentAuthEmail() {
 
     if (valueJustNumbers.length === 6) {
       setLoading(true);
-      const verifyCode =
-        valueJustNumbers === code
-          ? { status: 200, message: "eth" }
-          : { status: 400, message: "Código incorreto" };
 
-      if (verifyCode.status === 200) {
+      try {
+        const response = await api.post("/auth/email", {
+          email: email,
+          code: valueJustNumbers,
+        });
+
+        nextPage(2);
+        setTimer(response.data.timer);
+        setTimerRunning(true);
+
         setError("");
-        const token = verifyCode.message;
+        const token = response.data.token;
+        const userData = response.data.userData;
         localStorage.setItem("token", token);
-        router.push("dashboard");
-      } else {
-        setError(verifyCode.message);
-      }
-    }
+        localStorage.setItem("userData", JSON.stringify(userData));
 
-    setLoading(false);
+        if (userData.ambients.length > 1) {
+          router.push("ambients");
+        } else {
+          setAmbient(userData.ambients[0].ambient_id);
+          router.push("dashboard");
+        }
+      } catch (err: any) {
+        setError(err.response.data.detail || err.message);
+        setLoading(false);
+      }
+    } else setLoading(false);
   }
 
   return (
@@ -128,6 +142,7 @@ export function ComponentAuthEmail() {
                   id="email"
                   name="email"
                   type="email"
+                  sx={{ width: "100%" }}
                   maxRows={6}
                   label={t("auth_email_description")}
                   variant="outlined"

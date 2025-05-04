@@ -11,9 +11,12 @@ export default function NotFoundPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (validateToken()) {
+    if (validateToken(localStorage.getItem("token") || "")) {
       router.push(`/${currentLanguage}/dashboard`);
-    } else router.push(`/${currentLanguage}/auth`);
+    } else {
+      if (!location.pathname.includes("auth"))
+        router.push(`/${currentLanguage}/auth`);
+    }
   }, [currentLanguage, router, validateToken]);
   return <p>Not found</p>;
 }

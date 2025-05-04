@@ -7,10 +7,11 @@
   "head_title_employees": "Funcionários",
   "head_title_refunds": "Reembolsos",
   "head_title_refund": "Reembolso",
+  "head_title_ambients": "Ambientes",
   "head_description_auth": "Sessão de Autenticação",
   "head_content_auth": "Sessão de Autenticação",
   "language": "Idioma",
-  "auth_title": "Log in ou Sign up",
+  "auth_title": "Entrar ou cadastrar",
   "auth_description": "Escolha uma das opções",
   "auth_email": "Email",
   "auth_google": "Google",
@@ -26,6 +27,7 @@
   "companys": "Empresas",
   "company": "Empresa",
   "settings": "Configurações",
+  "ambients": "Ambientes",
   "logout": "Sair",
   "dashboard": "Dashboard",
   "employees": "Funcionários",
@@ -100,5 +102,9 @@
   "actions": "Ações",
   "date": "Data",
   "link_comprovant": "Link do comprovante",
-  "description": "Descrição"
+  "description": "Descrição",
+  "select_ambient": "Qual ambiente você deseja entrar?",
+  "enter": "Entrar",
+  "created_at": "Criado em",
+  "loading": "Carregando"
 }

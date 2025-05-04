@@ -6,3 +6,4 @@ export * from "./Companys";
 export * from "./Employees";
 export * from "./Refunds";
 export * from "./Refund";
+export * from "./Ambients";
