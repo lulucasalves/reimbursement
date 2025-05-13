@@ -60,7 +60,7 @@ export function ComponentTableChangesDialog({
   loading,
   confirmChanges,
 }) {
-  const { t } = useStatus();
+  const { t, formatDate } = useStatus();
   const isMobile = window.innerWidth < 768;
   const [fullscreen, setFullscreen] = useState(false);
   const [expanded, setExpanded] = useState(["create", "edit", "remove"]);
@@ -79,12 +79,12 @@ export function ComponentTableChangesDialog({
 
   function selectItemValue(val, header) {
     const headerItem = columns.find((column) => column.headerName === header);
-    const headerItemSelect =
-      headerItem?.renderEditCell?.name === "StatusEditCell";
+    const headerItemSelect = headerItem?.renderEditCell?.name;
 
-    if (headerItemSelect) {
+    if (headerItemSelect === "StatusEditCell") {
       return options[headerItem.field]?.find((item) => item.id === val).text;
-    }
+    } else if (headerItemSelect === "DateEditCell") return formatDate(val);
+
     return val;
   }
 

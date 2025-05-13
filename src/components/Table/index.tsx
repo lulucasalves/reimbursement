@@ -28,7 +28,8 @@ import { useAuth } from "~/src/contexts/auth";
 import { ComponentTableChangesDialog } from "./changesDialog";
 import { ButtonGroup, Container, GroupButtonsSave } from "./styles";
 
-import { generateHash } from "../../utils";
+import { formatDatePayload, generateHash } from "../../utils";
+import dayjs from "dayjs";
 
 export default function ComponentTable({
   data,
@@ -38,7 +39,6 @@ export default function ComponentTable({
   defaultAdd = {},
   loading = false,
   actions = true,
-  editLoading = false,
   confirmChanges = async (
     val: any
   ): Promise<{ message: string; success: boolean }> => {
@@ -77,7 +77,7 @@ export default function ComponentTable({
     renderEditCell: cellRenderer[val.renderEditCell],
   }));
 
-  const { t } = useStatus();
+  const { t, formatDate } = useStatus();
   const { moneyPrefix } = useAuth();
   const apiRef = useGridApiRef();
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
@@ -302,7 +302,18 @@ export default function ComponentTable({
     let editedItems = { id: obj1.id };
 
     for (const key in obj1) {
-      if (obj1[key] !== obj2[key]) {
+      const isDateFormat =
+        columns.find((val) => val.field === key).renderEditCell ===
+        cellRenderer.date;
+
+      if (isDateFormat) {
+        const date1 = obj1[key] ? formatDate(obj1[key]) : null;
+        const date2 = obj2[key] ? formatDate(obj2[key]) : null;
+
+        if (date1 !== date2) {
+          editedItems = { ...editedItems, [key]: formatDatePayload(obj1[key]) };
+        }
+      } else if (obj1[key] !== obj2[key]) {
         editedItems = { ...editedItems, [key]: obj1[key] };
       }
     }
@@ -448,13 +459,20 @@ export default function ComponentTable({
       edit: changes.editedItems,
       delete: changes.removedItems,
     });
+
     closeChangesDialog();
 
-    if (result.message) {
+    if (!result.success) {
       setAlertComponent({
         show: true,
-        message: result.message,
+        message: result.message || t("save_error"),
         severity: "error" as AlertColor,
+      });
+    } else {
+      setAlertComponent({
+        show: true,
+        message: t("successfully_saved"),
+        severity: "success" as AlertColor,
       });
     }
   }
@@ -469,7 +487,7 @@ export default function ComponentTable({
         columns={columns}
         options={options}
         confirmChanges={confirmChangesCallBack}
-        loading={editLoading}
+        loading={loading}
       />
       {actions && !loading && (
         <GroupButtonsSave>

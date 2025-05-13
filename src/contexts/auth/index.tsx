@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: InterfaceProvider) => {
     const currentCompany = localStorage.getItem("currentCompany");
 
     if (currentCompany) {
-      setCompany(currentCompany);
+      changeCompany(currentCompany);
     }
 
     if (userData) {

@@ -2,24 +2,85 @@ import { useStatus } from "~/src/contexts/state";
 import { Container } from "./styles";
 import ComponentTable from "../Table";
 import dayjs from "dayjs";
+import { useAuth } from "~/src/contexts/auth";
+import api from "~/src/services/api";
+import { useEffect, useState } from "react";
+import { eventStatus } from "~/src/utils/contants";
 
 export function ComponentEvents() {
   const { t } = useStatus();
-  const options = {
-    status: [
-      { id: "Ativo", text: "Ativo" },
-      { id: "Inativo", text: "Inativo" },
-    ],
-  };
-  const data = [
-    {
-      id: "4435345fdfsd",
-      event: "Visita Avon",
-      status: "Ativo",
-      initDate: dayjs("2024-05-02"),
-      endDate: dayjs("2024-05-02"),
-    },
-  ];
+  const { company } = useAuth();
+  const [options, setOptions] = useState({
+    statusId: [],
+  });
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  async function getEvents() {
+    const result = await api.post("/event", {
+      filters: {
+        companyId: company,
+      },
+    });
+
+    setData(
+      result.data.map((val) => ({
+        ...val,
+        id: val.eventId,
+        startDate: dayjs(val.startDate),
+        endDate: dayjs(val.endDate),
+      }))
+    );
+
+    return result;
+  }
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+
+      try {
+        const [status] = (
+          await Promise.all([api.post("/event-status", {}), getEvents()])
+        ).map((val) => val.data);
+
+        setOptions({
+          statusId: status.map((val) => ({
+            id: val.statusId,
+            text: t(`${val.status}_status`),
+          })),
+        });
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  async function confirmChanges(val) {
+    setLoading(true);
+
+    try {
+      const response = await api.post("/event/update", {
+        ...val,
+        companyId: company,
+      });
+
+      if (response.data.success) {
+        await getEvents();
+
+        return { success: true, message: "" };
+      }
+    } catch (err: any) {
+      return {
+        success: false,
+        message: err.response.data.detail ?? err.message,
+      };
+    } finally {
+      setLoading(false);
+    }
+
+    return { success: true, message: "" };
+  }
 
   const columns = [
     {
@@ -32,7 +93,7 @@ export function ComponentEvents() {
       editable: false,
     },
     {
-      field: "event",
+      field: "name",
       headerName: t("event"),
       flex: 1,
       minWidth: 150,
@@ -43,7 +104,7 @@ export function ComponentEvents() {
       unique: true,
     },
     {
-      field: "status",
+      field: "statusId",
       headerName: t("status"),
       flex: 1,
       align: "left",
@@ -54,7 +115,7 @@ export function ComponentEvents() {
       required: true,
     },
     {
-      field: "initDate",
+      field: "startDate",
       headerName: t("init_date"),
       flex: 1,
       minWidth: 200,
@@ -84,12 +145,13 @@ export function ComponentEvents() {
         options={options}
         data={data}
         columns={columns}
+        loading={loading}
         invisibleColumns={{ id: false }}
         defaultAdd={{
-          status: "Ativo",
-          initDate: dayjs("2024-05-02"),
-          endDate: dayjs("2024-05-02"),
+          statusId: eventStatus.activeId,
+          startDate: dayjs(),
         }}
+        confirmChanges={confirmChanges}
       />
     </Container>
   );

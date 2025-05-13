@@ -106,5 +106,9 @@
   "select_ambient": "Qual ambiente você deseja entrar?",
   "enter": "Entrar",
   "created_at": "Criado em",
-  "loading": "Carregando"
+  "loading": "Carregando",
+  "successfully_saved": "Alterações salvas com sucesso",
+  "save_error": "Ocorreu um erro ao salvar suas alterações",
+  "active_status": "Ativo",
+  "inactive_status": "Inativo"
 }

@@ -33,8 +33,7 @@ export const ContainerMenu = styled.div`
       display: block;
     }
 
-    .item1,
-    .item2 {
+    .item1 {
       display: none;
     }
 

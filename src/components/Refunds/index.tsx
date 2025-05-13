@@ -166,7 +166,6 @@ export function ComponentRefunds() {
   }
 
   function handleSelectEmployees(_, val) {
-    console.log(val);
     setSelectedEmployees(val);
   }
 

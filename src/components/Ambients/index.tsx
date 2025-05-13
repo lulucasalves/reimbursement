@@ -50,52 +50,69 @@ export function ComponentAmbients() {
   }
 
   const handleEditToggle = async (id: string) => {
-    setAmbientList((prevList) =>
-      prevList.map((item) => {
-        if (item.id === id) {
-          if (item.isEditing) {
-            const newName = editValue || item.name;
+    setAmbientList((prevList) => {
+      const updatedList = prevList.map((item) => ({
+        ...item,
+        isEditing: false,
+        name: item.isEditing ? item.originalName : item.name,
+      }));
 
-            return {
-              ...item,
-              isEditing: false,
-              name: newName,
-              loading: true,
-            };
-          }
+      return updatedList.map((item) => {
+        if (item.id === id && !item.isEditing) {
           setEditValue(item.name);
-          return { ...item, isEditing: !item.isEditing };
+          return { ...item, isEditing: true };
         }
         return item;
-      })
+      });
+    });
+  };
+
+  const handleSave = async (id: string) => {
+    const ambientToSave = ambientList.find((item) => item.id === id);
+    if (!ambientToSave || !editValue.trim()) return;
+
+    setAmbientList((prevList) =>
+      prevList.map((item) =>
+        item.id === id ? { ...item, loading: true } : item
+      )
     );
 
-    if (editValue) {
-      setEditValue("");
+    try {
+      const response = await api.post("/ambient/update", {
+        name: editValue,
+        ambientId: id,
+      });
 
-      try {
-        const response = await api.post("/ambient/update", {
-          name: editValue,
-          ambientId: id,
-        });
-
-        if (response.data.success) {
-          changeUserData({
-            ...userData,
-            ambients: ambientList.map((val) => ({
-              ...val,
-              ambient_id: val.id,
-              name: val.id === id ? editValue : val.name,
-            })),
-          });
-        }
-      } finally {
+      if (response.data.success) {
         setAmbientList((prevList) =>
           prevList.map((item) =>
-            item.id === id ? { ...item, loading: false } : item
+            item.id === id
+              ? {
+                  ...item,
+                  isEditing: false,
+                  name: editValue,
+                  originalName: editValue,
+                  loading: false,
+                }
+              : item
           )
         );
+
+        changeUserData({
+          ...userData,
+          ambients: ambientList.map((val) => ({
+            ...val,
+            ambient_id: val.id,
+            name: val.id === id ? editValue : val.name,
+          })),
+        });
       }
+    } finally {
+      setAmbientList((prevList) =>
+        prevList.map((item) =>
+          item.id === id ? { ...item, loading: false } : item
+        )
+      );
     }
   };
 
@@ -127,7 +144,11 @@ export function ComponentAmbients() {
               />
               <Button
                 variant="outlined"
-                onClick={() => handleEditToggle(ambient.id)}
+                onClick={() =>
+                  ambient.isEditing
+                    ? handleSave(ambient.id)
+                    : handleEditToggle(ambient.id)
+                }
                 loadingPosition="start"
                 color="primary"
                 disabled={ambient.loading}

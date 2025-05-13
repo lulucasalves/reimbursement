@@ -7,7 +7,7 @@ import { useAuth } from "~/src/contexts/auth";
 import { companyStatus } from "~/src/utils/contants";
 
 export function ComponentCompanys() {
-  const { t } = useStatus();
+  const { t, formatDate } = useStatus();
   const { currentAmbient } = useAuth();
   const [options, setOptions] = useState({
     statusId: [],
@@ -16,30 +16,43 @@ export function ComponentCompanys() {
   });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [editLoading, setEditLoading] = useState(false);
+
+  async function getCompanys() {
+    const result = await api.post("/company", {
+      filters: {
+        ambientId: currentAmbient,
+      },
+    });
+
+    setData(
+      result.data.map((val) => ({
+        ...val,
+        id: val.companyId,
+        createdAt: formatDate(val.createdAt),
+      }))
+    );
+
+    return result;
+  }
 
   useEffect(() => {
     (async () => {
       setLoading(true);
 
       try {
-        const [status, currency, monthFormat, data] = (
+        const [status, currency, monthFormat] = (
           await Promise.all([
             api.post("/company-status", {}),
             api.post("/currency", {}),
             api.post("/date-format", {}),
-            api.post("/company", {
-              filters: {
-                ambientId: currentAmbient,
-              },
-            }),
+            getCompanys(),
           ])
         ).map((val) => val.data);
 
         setOptions({
           statusId: status.map((val) => ({
             id: val.statusId,
-            text: val.status,
+            text: t(`${val.status}_status`),
           })),
           currencyId: currency.map((val) => ({
             id: val.currencyId,
@@ -50,8 +63,6 @@ export function ComponentCompanys() {
             text: val.dateFormat,
           })),
         });
-
-        setData(data.map((val) => ({ ...val, id: val.companyId })));
       } finally {
         setLoading(false);
       }
@@ -59,7 +70,7 @@ export function ComponentCompanys() {
   }, []);
 
   async function confirmChanges(val) {
-    setEditLoading(true);
+    setLoading(true);
 
     try {
       const response = await api.post("/company/update", {
@@ -70,25 +81,16 @@ export function ComponentCompanys() {
       if (response.data.success) {
         if (val.delete.length) location.reload();
 
-        setLoading(true);
-
-        const result = await api.post("/company", {
-          filters: {
-            ambientId: currentAmbient,
-          },
-        });
-
-        setData(result.data.map((val) => ({ ...val, id: val.companyId })));
+        await getCompanys();
 
         return { success: true, message: "" };
       }
     } catch (err: any) {
       return {
         success: false,
-        message: err.response.data.detail || err.message,
+        message: err.response.data.detail ?? err.message,
       };
     } finally {
-      setEditLoading(false);
       setLoading(false);
     }
 
@@ -126,6 +128,7 @@ export function ComponentCompanys() {
       editable: true,
       renderEditCell: "select",
       required: true,
+      filterable: false,
     },
     {
       field: "currencyId",
@@ -137,6 +140,7 @@ export function ComponentCompanys() {
       editable: true,
       renderEditCell: "select",
       required: true,
+      filterable: false,
     },
     {
       field: "dateFormatId",
@@ -148,6 +152,17 @@ export function ComponentCompanys() {
       editable: true,
       renderEditCell: "select",
       required: true,
+      filterable: false,
+    },
+    {
+      field: "createdAt",
+      headerName: t("created_at"),
+      flex: 1,
+      align: "left",
+      minWidth: 150,
+      headerAlign: "left",
+      editable: false,
+      required: false,
     },
   ];
 
@@ -161,7 +176,6 @@ export function ComponentCompanys() {
         loading={loading}
         invisibleColumns={{ id: false }}
         defaultAdd={{ statusId: companyStatus.activeId }}
-        editLoading={editLoading}
         confirmChanges={confirmChanges}
       />
     </Container>

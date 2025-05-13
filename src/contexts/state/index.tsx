@@ -77,34 +77,27 @@ export const StatusProvider = ({ children }: InterfaceProvider) => {
     window.location.pathname = path.join("/");
   }
 
-  function formatDate(dateString: string) {
-    const [datePart, timePart] = dateString.split(" - ");
-    const [year, month, day] = datePart.split("-");
-    const [hour = "00", minute = "00", second = "00"] = (
-      timePart || "00:00:00"
-    ).split(":");
+  function formatDate(dateProp: string) {
+    try {
+      const date = new Date(dateProp);
 
-    let formattedDate;
-    if (currentLanguage === "pt") {
-      formattedDate = `${String(day).padStart(2, "0")}/${String(month).padStart(
-        2,
-        "0"
-      )}/${year} - ${String(hour).padStart(2, "0")}:${String(minute).padStart(
-        2,
-        "0"
-      )}:${String(second).padStart(2, "0")}`;
-    } else {
-      const hour12 = Number(hour);
-      formattedDate = `${String(month).padStart(2, "0")}/${String(day).padStart(
-        2,
-        "0"
-      )}/${year} - ${String(hour12).padStart(2, "0")}:${String(minute).padStart(
-        2,
-        "0"
-      )}:${String(second).padStart(2, "0")}`;
+      if (isNaN(date.getTime())) {
+        return dateProp;
+      }
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+
+      if (currentLanguage === "pt") {
+        return `${day}/${month}/${year}`;
+      } else {
+        return `${month}/${day}/${year}`;
+      }
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return dateProp;
     }
-
-    return formattedDate;
   }
 
   const theme = createTheme(

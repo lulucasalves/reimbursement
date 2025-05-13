@@ -106,5 +106,9 @@
   "select_ambient": "What environment do you want to enter?",
   "enter": "Enter",
   "created_at": "Created at",
-  "loading": "Loading"
+  "loading": "Loading",
+  "successfully_saved": "Changes saved successfully",
+  "save_error": "An error occurred while saving your changes",
+  "active_status": "Active",
+  "inactive_status": "Inactive"
 }
