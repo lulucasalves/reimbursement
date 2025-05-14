@@ -80,7 +80,7 @@ export function ComponentGroupsTab() {
         data={data}
         columns={columns}
         invisibleColumns={{ id: false }}
-        defaultAdd={{ verification: "pendent", verificationColor: "warning" }}
+        defaultAdd={{ verification: "pending", verificationColor: "warning" }}
       />
       <Modal
         open={openDialog}

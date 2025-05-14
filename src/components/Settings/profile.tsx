@@ -33,18 +33,12 @@ export default function ComponentProfile() {
           alignItems: "center",
           marginBottom: 2,
           gap: 3,
-          padding: 2
+          padding: 2,
         }}
       >
-        <Avatar
-          src={avatar}
-          sx={{ width: 120, height: 120 }}
-        />
-        
-        <Button
-          variant="outlined"
-          component="label"
-        >
+        <Avatar src={avatar} sx={{ width: 120, height: 120 }} />
+
+        <Button variant="outlined" component="label">
           Alterar Foto
           <input
             type="file"

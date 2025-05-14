@@ -14,6 +14,7 @@ export function ComponentChipSelect({
   onChange,
   isMultiple = true,
   clearable = true,
+  loading = false,
 }: ChipSelectProps) {
   const { t } = useStatus();
 
@@ -24,6 +25,7 @@ export function ComponentChipSelect({
         limitTags={limitTags}
         disableClearable={!clearable}
         id={id}
+        loading={loading}
         options={options as { label?: string }[]}
         value={value as { label?: string }[]}
         onChange={onChange}

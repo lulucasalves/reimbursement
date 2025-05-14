@@ -112,6 +112,7 @@ export function ComponentEvents() {
       headerAlign: "left",
       editable: true,
       renderEditCell: "select",
+      filterable: false,
       required: true,
     },
     {

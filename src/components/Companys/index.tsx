@@ -175,7 +175,7 @@ export function ComponentCompanys() {
         columns={columns}
         loading={loading}
         invisibleColumns={{ id: false }}
-        defaultAdd={{ statusId: companyStatus.activeId }}
+        defaultAdd={{ statusId: companyStatus.activeId, createdAt: formatDate() }}
         confirmChanges={confirmChanges}
       />
     </Container>

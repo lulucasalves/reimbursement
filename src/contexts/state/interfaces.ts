@@ -10,7 +10,7 @@ export interface StatusContextType {
   modal: string;
   setModal: (value: string) => void;
   formatDate: (
-    dateString: string,
+    dateProp?: string | Date | undefined,
     options?: Intl.DateTimeFormatOptions
   ) => string;
 }

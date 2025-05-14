@@ -1,34 +1,83 @@
 import { useStatus } from "~/src/contexts/state";
 import { Content, GroupButtons, TitleClose } from "./styles";
 import ComponentTable from "../Table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Divider, Modal } from "@mui/material";
 import { RiCloseLine } from "react-icons/ri";
 import { ComponentChipSelect } from "../Selects/Chip";
+import api from "~/src/services/api";
+import { useAuth } from "~/src/contexts/auth";
+import { employeeVerificationColor } from "~/src/utils/contants";
 
 export function ComponentEmployeesTab() {
   const { t } = useStatus();
+  const { company } = useAuth();
   const [openDialog, setOpenDialog] = useState(false);
   const [employee, setEmployee] = useState({ employee: "" });
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const options = {};
+  async function getEmployees() {
+    const result = await api.post("/employee", {
+      filters: {
+        companyId: company,
+      },
+    });
+
+    setData(
+      result.data.map((val) => ({
+        ...val,
+        id: val.employeeId,
+        verification: t(val.verification),
+        verificationColor: employeeVerificationColor[val.verification],
+        [t("edit_groups")]: null,
+      }))
+    );
+
+    return result;
+  }
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+
+      try {
+        getEmployees();
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  async function confirmChanges(val) {
+    setLoading(true);
+
+    try {
+      const response = await api.post("/employee/update", {
+        ...val,
+        companyId: company,
+      });
+
+      if (response.data.success) {
+        await getEmployees();
+
+        return { success: true, message: "" };
+      }
+    } catch (err: any) {
+      return {
+        success: false,
+        message: err.response.data.detail ?? err.message,
+      };
+    } finally {
+      setLoading(false);
+    }
+
+    return { success: true, message: "" };
+  }
 
   const groups = [
     { value: 1, label: "Admin" },
     { value: 2, label: "Aprovador" },
-  ];
-
-  const data = [
-    {
-      id: "4435345fdfsd",
-      employee: "Antônio Fagundes",
-      email: "antonio.fagundes@la.tech",
-      phone: "12 5888-5589",
-      document: "848.486.484-23",
-      verification: "Verificado",
-      verificationColor: "success",
-      [t("edit_groups")]: null,
-    },
   ];
 
   const columns = [
@@ -42,7 +91,7 @@ export function ComponentEmployeesTab() {
       editable: false,
     },
     {
-      field: "employee",
+      field: "name",
       headerName: t("employee"),
       flex: 1,
       minWidth: 150,
@@ -56,7 +105,7 @@ export function ComponentEmployeesTab() {
       field: "email",
       headerName: t("email"),
       flex: 1,
-      minWidth: 150,
+      minWidth: 250,
       align: "left",
       headerAlign: "left",
       editable: true,
@@ -122,11 +171,15 @@ export function ComponentEmployeesTab() {
   return (
     <>
       <ComponentTable
-        options={options}
         data={data}
+        loading={loading}
         columns={columns}
         invisibleColumns={{ id: false }}
-        defaultAdd={{ verification: "pendent", verificationColor: "warning" }}
+        defaultAdd={{
+          verification: t("pending"),
+          verificationColor: "warning",
+        }}
+        confirmChanges={confirmChanges}
       />
       <Modal
         open={openDialog}

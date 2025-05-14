@@ -8,6 +8,7 @@ export interface ChipSelectProps {
   height?: string | number;
   isMultiple?: boolean;
   clearable?: boolean;
+  loading?: boolean;
   getOptionLabel?: (option: unknown) => string;
   onChange?: (event: unknown, newValue: unknown) => void;
 }

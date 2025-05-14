@@ -9,7 +9,7 @@ export function ComponentEmployees() {
   const { t } = useStatus();
   const [tabIndex, setTabIndex] = useState(0);
 
-  const handleChange = (event, newIndex) => {
+  const handleChange = (_, newIndex) => {
     setTabIndex(newIndex);
   };
 

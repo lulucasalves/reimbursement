@@ -77,9 +77,10 @@ export const StatusProvider = ({ children }: InterfaceProvider) => {
     window.location.pathname = path.join("/");
   }
 
-  function formatDate(dateProp: string) {
+  function formatDate(dateProp) {
     try {
-      const date = new Date(dateProp);
+      let date = new Date();
+      if (dateProp) date = new Date(dateProp);
 
       if (isNaN(date.getTime())) {
         return dateProp;

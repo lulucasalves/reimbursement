@@ -29,7 +29,6 @@ import { ComponentTableChangesDialog } from "./changesDialog";
 import { ButtonGroup, Container, GroupButtonsSave } from "./styles";
 
 import { formatDatePayload, generateHash } from "../../utils";
-import dayjs from "dayjs";
 
 export default function ComponentTable({
   data,
@@ -94,16 +93,16 @@ export default function ComponentTable({
   const [tableChangesDialog, setTableChangesDialog] = useState(false);
   const [changes, setChanges] = useState<any>({});
   const [removedRows, setRemovedRows] = useState<string[]>([]);
+  const [gridKey, setGridKey] = useState(0);
 
   function closeChangesDialog() {
     setTableChangesDialog(false);
   }
 
   useEffect(() => {
-    if (!loading) {
-      setRows(data);
-    }
-  }, [loading]);
+    setRows(data);
+    setGridKey((prev) => prev + 1);
+  }, [data]);
 
   function MoneyCell(props: GridRenderEditCellParams) {
     const { id, field, value } = props;
@@ -567,6 +566,7 @@ export default function ComponentTable({
         }}
       >
         <DataGrid
+          key={gridKey}
           apiRef={apiRef}
           rows={rows}
           columns={columns}

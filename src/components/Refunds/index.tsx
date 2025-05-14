@@ -7,24 +7,44 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { RiCloseLine } from "react-icons/ri";
 import { BiExitFullscreen, BiFullscreen } from "react-icons/bi";
+import api from "~/src/services/api";
+import { eventStatus } from "~/src/utils/contants";
+import { useAuth } from "~/src/contexts/auth";
 
 export function ComponentRefunds() {
   const { t } = useStatus();
+  const { company } = useAuth();
   const [selectedEvent, setSelectedEvent] = useState<any>();
   const [manageUsersDialog, setManageUsersDialog] = useState<boolean>(false);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [selectedGroups, setSelectedGroups] = useState([]);
   const [fullscreen, setFullscreen] = useState(false);
-  const [events] = useState([
-    {
-      value: 1,
-      label: "Evento 1",
-    },
-    {
-      value: 2,
-      label: "Evento 2",
-    },
-  ]);
+  const [eventLoading, setEventLoading] = useState(false);
+  const [events, setEvents] = useState<{ label: string; id: string }[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      setEventLoading(true);
+
+      try {
+        const result = await api.post("/event", {
+          filters: {
+            statusId: [eventStatus.activeId],
+            companyId: company,
+          },
+        });
+
+        setEvents(
+          result.data.map((val) => ({ value: val.eventId, label: val.name }))
+        );
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setEventLoading(false);
+      }
+    })();
+  }, []);
+
   const [employees] = useState([
     {
       value: 1,
@@ -144,7 +164,7 @@ export function ComponentRefunds() {
         setSelectedEvent(refundEvent);
       }
     }
-  }, []);
+  }, [events]);
 
   const Table = () => {
     return !selectedEvent ? (
@@ -276,6 +296,7 @@ export function ComponentRefunds() {
               id="event"
               options={events}
               label="event"
+              loading={eventLoading}
               isMultiple={false}
               clearable={false}
               onChange={handleChangeEvent}
