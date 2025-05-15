@@ -17,7 +17,8 @@ import { RiUserSettingsLine } from "react-icons/ri";
 import { MdOutlinePerson, MdPerson } from "react-icons/md";
 import { BiExitFullscreen, BiFullscreen } from "react-icons/bi";
 import ComponentPreferences from "./preferences";
-import ComponentProfile from "./profile";
+import ComponentInvite from "./invite";
+import { BsEnvelopePaper, BsEnvelopePaperFill } from "react-icons/bs";
 
 export default function ComponentSettings({
   isOpen,
@@ -37,11 +38,11 @@ export default function ComponentSettings({
       component: <ComponentPreferences />,
     },
     {
-      text: t("profile"),
-      icon: <MdOutlinePerson fontSize={22} />,
-      iconFill: <MdPerson fontSize={22} />,
-      path: "profile",
-      component: <ComponentProfile />,
+      text: t("invites"),
+      icon: <BsEnvelopePaper fontSize={20} />,
+      iconFill: <BsEnvelopePaperFill fontSize={20} />,
+      path: "invites",
+      component: <ComponentInvite />,
     },
   ];
 

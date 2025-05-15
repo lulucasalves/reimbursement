@@ -129,7 +129,6 @@ export function ComponentEmployeesTab() {
       align: "left",
       headerAlign: "left",
       editable: true,
-      required: true,
       unique: true,
     },
     {

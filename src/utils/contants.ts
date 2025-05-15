@@ -9,4 +9,5 @@ export const eventStatus = {
 export const employeeVerificationColor = {
   verified: "success",
   pending: "warning",
+  refused: "error",
 };

@@ -38,7 +38,7 @@ export function ComponentGroupsTab() {
       editable: false,
     },
     {
-      field: "group",
+      field: "name",
       headerName: t("group"),
       flex: 1,
       minWidth: 150,

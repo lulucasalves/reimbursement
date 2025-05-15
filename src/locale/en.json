@@ -36,6 +36,7 @@
   "preferences": "Preferences",
   "theme": "Theme",
   "profile": "Profile",
+  "invites": "Invites",
   "name": "Name",
   "createdAt": "Created at",
   "status": "Status",
@@ -77,6 +78,7 @@
   "save_new_row_to_edit_groups": "Save the newly added data to be able to edit your groups",
   "verified": "Verified",
   "pending": "Pending",
+  "refused": "Refused",
   "group": "Group",
   "permissions": "Permissions",
   "edit_permissions": "Edit permissions",
@@ -110,5 +112,7 @@
   "successfully_saved": "Changes saved successfully",
   "save_error": "An error occurred while saving your changes",
   "active_status": "Active",
-  "inactive_status": "Inactive"
+  "inactive_status": "Inactive",
+  "accept": "Accept",
+  "refuse": "Refuse"
 }
